@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { RootStackParamList } from '../types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -7,8 +7,18 @@ import { Input } from '../components/TextInput';
 
 const ForgotPasswordScreen: React.FC = () => {
   const [email, setEmail] = useState('');
+  const [buttonEnabled, setButtonEnabled] = useState(false);
+
   type VerifyScreenNavigationProp = StackNavigationProp<RootStackParamList, 'VerifyScreen'>;
   const navigation = useNavigation<VerifyScreenNavigationProp>();
+  const isValidEmail = (email: string) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+  useEffect(() => {
+    setButtonEnabled(isValidEmail(email));
+  }, [email]);
+
   const handleRecoverPassword = () => {
     navigation.navigate('VerifyScreen'); 
   };
@@ -18,7 +28,7 @@ const ForgotPasswordScreen: React.FC = () => {
       <Text style={styles.subtitle}>Please enter your email to recover your password.</Text>
       <Text style={styles.label}>Email</Text>
       <Input placeholder="Enter your email" value={email} onChangeText={setEmail} keyboardType="email-address" />
-      <TouchableOpacity style={styles.button} onPress={handleRecoverPassword}>
+      <TouchableOpacity style={[styles.button, {backgroundColor: buttonEnabled ? '#3E77BC' : '#A0B9D9'}]} onPress={handleRecoverPassword} disabled={!buttonEnabled} >
         <Text style={styles.buttonText}>Recover Password</Text>
       </TouchableOpacity>
     </View>
@@ -64,7 +74,6 @@ const styles = StyleSheet.create({
     left: 20,
     right: 20,
     height: 50,
-    backgroundColor: '#3E77BC',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,

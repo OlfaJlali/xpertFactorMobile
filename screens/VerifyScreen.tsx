@@ -13,6 +13,7 @@ const VerifyScreen: React.FC = () => {
 
   const [code, setCode] = useState(['', '', '', '']);
   const inputRefs = useRef<Array<TextInput | null>>([]); 
+  const isCodeComplete = code.every(digit => digit !== '');
   const handleCodeChange = (value: string, index: number) => {
     const newCode = [...code];
     newCode[index] = value;
@@ -44,7 +45,6 @@ const VerifyScreen: React.FC = () => {
               maxLength={1}
               value={digit}
               onChangeText={(value) => handleCodeChange(value, index)}
-              returnKeyType="next"
               onKeyPress={({ nativeEvent }) => {
                 if (nativeEvent.key === 'Backspace' && index > 0 && code[index] === '') {
                   inputRefs.current[index - 1]?.focus(); 
@@ -53,7 +53,7 @@ const VerifyScreen: React.FC = () => {
             />
           ))}
         </View>
-        <TouchableOpacity style={styles.button} onPress={handleVerifyCode}>
+        <TouchableOpacity style={[styles.button , {    backgroundColor: isCodeComplete ? '#3E77BC' : '#A0B9D9'}]} onPress={handleVerifyCode} disabled={!isCodeComplete} >
           <Text style={styles.buttonText}>Verify Code</Text>
         </TouchableOpacity>
       </View>
@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 50,
-    backgroundColor: '#3E77BC',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
