@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   buttonDisabled: {
     width: '100%',
     height: 50,
-    backgroundColor: '#cdeeff',
+    backgroundColor: '#A0B9D9',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,

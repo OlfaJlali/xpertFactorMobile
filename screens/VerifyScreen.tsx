@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import { RootStackParamList } from '../types/navigationTypes';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { COLOR_BLACK } from '../styles/globalStyles';
 
 const VerifyScreen: React.FC = () => {
   type VerifyScreenNavigationProp = StackNavigationProp<RootStackParamList, 'VerifyScreen'>;
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#007BFF', 
+    color: '#000', 
     textAlign: 'center',
     marginBottom: 10,
     marginTop: 50
@@ -94,9 +95,9 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   codeInput: {
-    width: 50,
-    height: 50,
-    borderColor: '#ccc',
+    width: 60,
+    height: 60,
+    borderColor: COLOR_BLACK,
     borderWidth: 1,
     borderRadius: 5,
     textAlign: 'center',
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 50,
-    backgroundColor: '#007BFF',
+    backgroundColor: '#3E77BC',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
