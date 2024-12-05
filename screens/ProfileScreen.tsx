@@ -2,8 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
-// import Icon from 'react-native-vector-icons/FontAwesome';
 import { RootStackParamList } from '../types/navigationTypes';
+import Icon from '../utils/Icons';
 
 const ProfileScreen: React.FC = () => {
     type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Profile'>;
@@ -20,40 +20,46 @@ const ProfileScreen: React.FC = () => {
     <View style={styles.container}>
       {/* Profile Section */}
       <View style={styles.profileContainer}>
+      <View style={styles.imageWrapper}>
         <Image
           style={styles.profileImage}
-          source={{ uri: 'https://gravatar.com/avatar/828a6fbd5f1da66fd6ef3830e005f43a?s=400&d=mp&r=x' }} // Replace with the actual image source
+          source={require('../assets/profile.png')}
         />
-        <Text style={styles.nameText}>Jlali Olfa</Text>
-        <Text style={styles.emailText}>olfajlali@gmail.com</Text>
+        <TouchableOpacity style={styles.editIcon} onPress={() => console.log('Edit profile image')}>
+          <Icon name={'Camera'} size={24} color={ '#282534' } />
+        </TouchableOpacity>
       </View>
+      <Text style={styles.nameText}>Jlali Olfa</Text>
+      <Text style={styles.emailText}>olfajlali@gmail.com</Text>
+    </View>
 
       {/* Menu Section */}
       <View style={styles.menuContainer}>
         <TouchableOpacity style={styles.menuItem} onPress={handleGotoMyAccount}>
           <View style={styles.iconContainer}>
-          {/* < Icon name="user" size={30} color="blue" /> */}
+          <Icon name={'User'} size={24} color={ '#282534' } />
           </View>
           <Text style={styles.menuText}>My Account</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.menuItem} onPress={handleGotoSettings}>
           <View style={styles.iconContainer}>
-          {/* < Icon name="gear" size={30} color="blue" /> */}
+          <Icon name={'Settings'} size={24} color={ '#282534' } />
+
           </View>
           <Text style={styles.menuText}>Settings</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.menuItem}>
           <View style={styles.iconContainer}>
-          {/* < Icon name="file-text" size={30} color="blue" /> */}
+          <Icon name={'Lock'} size={24} color={ '#282534' } />
           </View>
           <Text style={styles.menuText}>Policy privacy</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.menuItem, styles.logoutItem]}>
           <View style={styles.iconContainer}>
-         {/* < Icon name="close" size={30} color="red" /> */}
+          <Icon name={'SquareArrowLeft'} size={24} color={ '#ED5757' } />
         </View>
           <Text style={[styles.menuText, styles.logoutText]}>Logout</Text>
         </TouchableOpacity>
@@ -64,6 +70,20 @@ const ProfileScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  imageWrapper: {
+    position: 'relative',
+  },
+  editIcon: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    borderRadius: 50,
+    padding: 5,
+    borderWidth:1,
+    backgroundColor: '#F5F5F5'
+    
+
+  },
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
@@ -73,15 +93,18 @@ const styles = StyleSheet.create({
     marginTop: 50,
     marginBottom: 30,
   },
+
   profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
+
   nameText: {
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 10,
+    color :'#000'
   },
   emailText: {
     fontSize: 14,
@@ -118,12 +141,13 @@ const styles = StyleSheet.create({
   menuText: {
     fontSize: 16,
     marginLeft: 10,
+    color: '#000'
   },
   logoutItem: {
     borderBottomWidth: 0,
   },
   logoutText: {
-    color: 'red',
+    color: '#ED5757',
   },
 });
 

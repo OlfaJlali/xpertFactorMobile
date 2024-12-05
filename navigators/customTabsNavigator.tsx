@@ -8,6 +8,7 @@ import { BordereauxStackNavigator } from './BordoreauxStackNavigator';
 import { TabItem } from '../types/BottomSheetTypes';
 import { useShow } from '../context/ShowContext';
 import { useTab } from '../context/TabContext';
+import { ProfileStackNavigator } from './ProfileStackNavigator';
 
 const CustomTabsNavigator: React.FC = () => {
   const { selectedIndex, setSelectedIndex } = useTab();
@@ -15,7 +16,7 @@ const CustomTabsNavigator: React.FC = () => {
 
   const screens: TabItem[] = [
     { icon: 'LayoutDashboard', label: 'Dashboard', component: DashboardScreen },
-    { icon: 'User', label: 'Profile', component: ProfileScreen },
+    { icon: 'User', label: 'Profile', component: ProfileStackNavigator },
     { icon: 'Plus', label: '', component: ProfileScreen}, 
     { icon: 'File', label: 'Bordereaux', component: BordereauxStackNavigator}, 
     { icon: 'Sailboat', label: 'Sailboat', component: BordoreauxScreen }, 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, SafeAreaView } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+// import Icon from 'react-native-vector-icons/FontAwesome';
 
 const MyAccountScreen = () => {
     
@@ -26,9 +26,9 @@ const MyAccountScreen = () => {
           source={{ uri: 'https://gravatar.com/avatar/828a6fbd5f1da66fd6ef3830e005f43a?s=400&d=mp&r=x' }} // Replace with the actual image source
           style={styles.profileImage}
         />
-        <TouchableOpacity style={styles.cameraIcon}>
+        {/* <TouchableOpacity style={styles.cameraIcon}>
           <Icon name="camera" size={20} color="white" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       {/* Name Input */}

@@ -3,13 +3,10 @@ import { icons } from 'lucide-react-native';
 import { IconProp, TabsNavigatorProps } from '../types/BottomSheetTypes';
 import { useRef, useState } from 'react';
 import {Shadow} from 'react-native-shadow-2';
+import Icon from '../utils/Icons';
 
 const { width } = Dimensions.get('window');
 
-function Icon({ color, size = 16, name, ...rest }: IconProp) {
-  const IconComponent = icons[name];
-  return <IconComponent color={color} size={size} {...rest} />;
-}
 
 export function TabsNavigator({
   data,
