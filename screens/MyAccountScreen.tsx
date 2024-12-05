@@ -1,72 +1,76 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, SafeAreaView } from 'react-native';
+import { Input } from '../components/TextInput';
+import { Button } from '../components/Button';
+import { isValidEmail } from '../utils/validation';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../types/navigationTypes';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 
 const MyAccountScreen = () => {
     
   // Example states to hold user info
   const [name, setName] = useState('Jlali Olfa');
-  const [email, setEmail] = useState('Louis04real@gmail.com');
+  const [email, setEmail] = useState('olfajlali@gmail.com');
   const [phoneNumber, setPhoneNumber] = useState('+21652693684');
+  const [Disabled ,setDisabled] = useState(false)
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'MyAccount'>>();
+
 
   const handleSave = () => {
-    // Implement save logic here
     console.log("Saved");
+    navigation.navigate('Profile');
   };
+
+  const isDisabled = () => {
+    if(name == '' || email == '' || phoneNumber == '' || !isValidEmail(email)) {
+      setDisabled(true)
+    } else {
+      setDisabled(false)
+    }
+  }
+  useEffect(()=> {
+    isDisabled()
+  })
 
   return (
      <SafeAreaView style={styles.safeAreaContainer} >
     <View style={styles.container}>
       {/* Header */}
-
+  
 
       {/* Profile Image */}
       <View style={styles.profileContainer}>
         <Image
-          source={{ uri: 'https://gravatar.com/avatar/828a6fbd5f1da66fd6ef3830e005f43a?s=400&d=mp&r=x' }} // Replace with the actual image source
+        source={require('../assets/profile.png')}
           style={styles.profileImage}
         />
-        {/* <TouchableOpacity style={styles.cameraIcon}>
-          <Icon name="camera" size={20} color="white" />
-        </TouchableOpacity> */}
+       
       </View>
 
       {/* Name Input */}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Name</Text>
-        <TextInput
-          value={name}
-          onChangeText={setName}
-          style={styles.input}
-        />
+        <Input  placeholder={name} value={name} onChangeText={setName} />
+       
       </View>
 
       {/* Email Input */}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Email</Text>
-        <TextInput
-          value={email}
-          onChangeText={setEmail}
-          style={styles.input}
-          keyboardType="email-address"
-        />
+        <Input  placeholder={email} value={email} onChangeText={setEmail} keyboardType='email-address' />
       </View>
 
       {/* Phone Number Input */}
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Phone Number</Text>
-        <TextInput
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-          style={styles.input}
-          keyboardType="phone-pad"
-        />
+        <Input  placeholder={phoneNumber} value={phoneNumber} onChangeText={setPhoneNumber} keyboardType='phone-pad' />
       </View>
 
       {/* Save Button */}
-      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-        <Text style={styles.saveButtonText}>Save</Text>
-      </TouchableOpacity>
+      <Button title={'Save'} onPress={handleSave} disabled={Disabled} />
+      
       </View>
       </SafeAreaView>
   );
@@ -75,7 +79,8 @@ const MyAccountScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 50,
     backgroundColor: '#fff',
   },
   safeAreaContainer: {
@@ -119,7 +124,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginBottom: 5,
-    color: '#555',
+    color: '#000',
   },
   input: {
     borderWidth: 1,

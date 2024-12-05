@@ -3,29 +3,33 @@ import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-na
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
+import Icon from '../utils/Icons';
 
 const SettingsScreen = () => {
- type SettingScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Settings'>;
-    const navigation = useNavigation<SettingScreenNavigationProp>();
-    return (
-       <SafeAreaView style={styles.safeAreaContainer} >
-    <View style={styles.container}>
-      <TouchableOpacity 
-        style={styles.optionRow} 
-        onPress={() => navigation.navigate('ResetPassword')}
-      >
-        <Text style={styles.optionText}>Reset Password</Text>
-        <Text style={styles.arrow}>›</Text>
-      </TouchableOpacity>
+  type SettingScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Settings'>;
+  const navigation = useNavigation<SettingScreenNavigationProp>();
 
-      <TouchableOpacity 
-        style={styles.optionRow} 
-        onPress={() => navigation.navigate('Notifications')}
-      >
-        <Text style={styles.optionText}>Notifications</Text>
-        <Text style={styles.arrow}>›</Text>
-      </TouchableOpacity>
-    </View>
+  return (
+    <SafeAreaView style={styles.safeAreaContainer}>
+      <View style={styles.container}>
+        <TouchableOpacity 
+          style={styles.optionRow} 
+          onPress={() => navigation.navigate('ResetPassword')}
+        >
+          <Icon name={'Settings'} size={24} color={'#282534'} />
+          <Text style={styles.optionText}>Reset Password</Text>
+          <Text style={styles.arrow}>›</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.optionRow} 
+          onPress={() => navigation.navigate('Notifications')}
+        >
+          <Icon name={'Bell'} size={24} color={'#282534'} />
+          <Text style={styles.optionText}>Notifications</Text>
+          <Text style={styles.arrow}>›</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -44,7 +48,6 @@ const styles = StyleSheet.create({
   },
   optionRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 15,
     borderBottomWidth: 1,
@@ -52,15 +55,17 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    },
+    color: '#000',
+    paddingLeft: 20,
+    flex: 1,  
+  },
   safeAreaContainer: {
     flex: 1,
     backgroundColor: '#fff',
   },
   arrow: {
-    fontSize: 18,
-    color: '#ccc',
+    fontSize: 24,
+    color: '#000',
   },
 });
 

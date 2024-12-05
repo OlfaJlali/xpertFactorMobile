@@ -4,6 +4,7 @@ import { RootStackParamList } from '../types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { Input } from '../components/TextInput';
+import { isValidEmail } from '../utils/validation';
 
 const ForgotPasswordScreen: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -11,10 +12,7 @@ const ForgotPasswordScreen: React.FC = () => {
 
   type VerifyScreenNavigationProp = StackNavigationProp<RootStackParamList, 'VerifyScreen'>;
   const navigation = useNavigation<VerifyScreenNavigationProp>();
-  const isValidEmail = (email: string) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  };
+  
   useEffect(() => {
     setButtonEnabled(isValidEmail(email));
   }, [email]);
