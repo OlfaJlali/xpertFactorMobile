@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 // import Icon from 'react-native-vector-icons/Feather';
 import { Button } from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
+import { useShow } from '../context/ShowContext';
 type VerifyScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
 
 const BordoreauxStarter = () => {
+
     const navigation = useNavigation<VerifyScreenNavigationProp>();
+    const { show, setShow } = useShow();  
+    useEffect(()=> {
+      setShow(false)
+    },[])
+
     const goToBordoreaux = () => {
-        navigation.navigate('Bordoreaux');
+      navigation.navigate('Bordoreaux');
+      setShow(true)
       };
   return (
     <View style={styles.container}>

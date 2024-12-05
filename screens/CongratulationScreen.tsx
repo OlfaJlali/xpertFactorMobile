@@ -1,10 +1,26 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions,  } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient'; 
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Image, Dimensions,  } from 'react-native';
 import { Button } from '../components/Button';
-const { height, width } = Dimensions.get('window');
+import { useShow } from '../context/ShowContext';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../types/navigationTypes';
+import { useTab } from '../context/TabContext';
+const { height } = Dimensions.get('window');
 
 const CongratulationsScreen = () => {
+  const { setShow } = useShow();  
+  const { setSelectedIndex } = useTab();
+  useEffect(()=> {
+    setShow(false)
+  },[])
+  type CongratsSreenNavigationProps = StackNavigationProp<RootStackParamList, 'Dashboard'>;
+  const navigation = useNavigation<CongratsSreenNavigationProps>();
+  const goToDashboard = () => {
+    //TO-CHANGE
+    setSelectedIndex(0); 
+    setShow(true)
+    };
   return (
     <View style={styles.container}>
       <View style={styles.characterWrapper}>
@@ -18,15 +34,7 @@ const CongratulationsScreen = () => {
         <Text style={styles.subtitle}>
            You managed to update 2 documents
         </Text>
-        {/* <TouchableOpacity activeOpacity={0.8} style={styles.button}>
-          <LinearGradient
-            colors={['#32D74B', '#34C759']}
-            style={styles.buttonGradient}
-          >
-            <Text style={styles.buttonText}>Done</Text>
-          </LinearGradient>
-        </TouchableOpacity> */}
-        <Button title="Done" onPress={()=>{}} disabled={false} />
+        <Button title="Done" onPress={goToDashboard} disabled={false} />
 
       </View>
     </View>
