@@ -9,6 +9,7 @@ import { TabItem } from '../types/BottomSheetTypes';
 import { useShow } from '../context/ShowContext';
 import { useTab } from '../context/TabContext';
 import { ProfileStackNavigator } from './ProfileStackNavigator';
+import { RequestFinancementStackNavigator } from './RequestFinancementStackNavigator';
 
 const CustomTabsNavigator: React.FC = () => {
   const { selectedIndex, setSelectedIndex } = useTab();
@@ -19,7 +20,7 @@ const CustomTabsNavigator: React.FC = () => {
     { icon: 'User', label: 'Profile', component: ProfileStackNavigator },
     { icon: 'Plus', label: '', component: ProfileScreen}, 
     { icon: 'File', label: 'Bordereaux', component: BordereauxStackNavigator}, 
-    { icon: 'Sailboat', label: 'Sailboat', component: BordoreauxScreen }, 
+    { icon: 'Sailboat', label: 'Sailboat', component: RequestFinancementStackNavigator }, 
   ];
 
   const CurrentScreen = screens[selectedIndex].component;

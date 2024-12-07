@@ -2,12 +2,10 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigationTypes';
+import { useAuth } from '../context/AuthContext';
 
-export type SignInProps = {
-  setIsAuthed: Dispatch<SetStateAction<boolean>>;
-};
-
-export const useSignIn = ({ setIsAuthed }: SignInProps) => {
+export const useSignIn = () => {
+  const { setIsAuthed } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'SignIn'>>();

@@ -14,6 +14,11 @@ export type RootStackParamList = {
     Notifications: undefined;
     CurrentScreen: undefined;
     BordoreauxStarter: undefined;
+    RequestFinancement: {
+        totalAmout: string ,
+        date : Date ,
+        type : string
+    }
     BordoreauxForm: {
         totalAmount: string;
         date: Date;

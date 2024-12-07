@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, Image, SafeAreaView, Text, View } from 'react-native';
-import { useSignIn, SignInProps } from '../hooks/useSignIn';
+import { useSignIn } from '../hooks/useSignIn';
 import { Input } from '../components/TextInput';
 import { Button } from '../components/Button';
 import { TextLink } from '../components/TextLink';
@@ -8,8 +8,8 @@ import { signInScreenStyles } from '../styles/signInScreenStyles';
 import { globalStyles } from '../styles/globalStyles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-export function SignInScreen({ setIsAuthed }: SignInProps) {
-  const { email, setEmail, password, setPassword, handleSignIn, handleForgotPassword } = useSignIn({ setIsAuthed });
+export function SignInScreen() {
+  const { email, setEmail, password, setPassword, handleSignIn, handleForgotPassword } = useSignIn();
   const { width } = Dimensions.get('window');
   return (
     <SafeAreaView style={globalStyles.safeAreaContainer}>

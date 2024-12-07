@@ -17,27 +17,22 @@ const BordorauxDates = () => {
 
         {/* Token Information */}
         <TouchableOpacity onPress={() => setIsOpenDate(!isOpenDate)}>
-{/* <View style={[styles.card, styles.plainCard]}> */}
-{/* <MaterialCommunityIcons name="download" size={30} color="#2E2E3A" /> */}
-
-{/* <Text style={styles.percentageTextDark}>17.7%</Text> */}
-{/* <Text style={styles.subtitleDark}>due date</Text> */}
-<View style={{flexDirection: 'row'}} >
-<Text style={styles.DateTextDark}>{`${dueDate.getDate()}.${dueDate.getMonth() + 1}`}</Text>
-<Text style={styles.YearTextDark}>.{dueDate.getFullYear()}</Text>
-</View>
-<DatePicker
-modal
-open={isOpenDate}
-date={dueDate}
-mode="date"
-onConfirm={(date: Date) => {
-setDueDate(date);
-setIsOpenDate(false);
-}}
-onCancel={() => setIsOpenDate(false)}
-/>
-{/* </View> */}
+        <View style={{flexDirection: 'row'}} >
+        <Text style={styles.DateTextDark}>{`${dueDate.getDate()}.${dueDate.getMonth() + 1}`}</Text>
+        <Text style={styles.YearTextDark}>.{dueDate.getFullYear()}</Text>
+        </View>
+        <DatePicker
+        modal
+        open={isOpenDate}
+        date={dueDate}
+        mode="date"
+        onConfirm={(date: Date) => {
+        setDueDate(date);
+        setIsOpenDate(false);
+        }}
+        onCancel={() => setIsOpenDate(false)}
+        />
+        {/* </View> */}
 </TouchableOpacity>
 <Text style={styles.title}>Due date</Text>
 

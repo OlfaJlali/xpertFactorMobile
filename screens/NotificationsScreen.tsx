@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Switch, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const NotificationsScreen = () => {
   const [isEnabled1, setIsEnabled1] = useState(true);
@@ -7,6 +8,8 @@ const NotificationsScreen = () => {
   const [isEnabled3, setIsEnabled3] = useState(false);
 
   return (
+    <SafeAreaView style={styles.safeAreaContainer}>
+    
     <View style={styles.container}>
       <View style={styles.notificationRow}>
         <Text style={styles.notificationText}>Notification type 1</Text>
@@ -32,6 +35,7 @@ const NotificationsScreen = () => {
         />
       </View>
     </View>
+    </SafeAreaView>
   );
 };
 
@@ -40,6 +44,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingHorizontal: 20,
+  },
+  safeAreaContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
   },
   notificationRow: {
     flexDirection: 'row',
@@ -51,6 +59,7 @@ const styles = StyleSheet.create({
   },
   notificationText: {
     fontSize: 16,
+    color : '#000'
   },
 });
 

@@ -1,25 +1,36 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import AppNavigator from './navigators/AppNavigator';
 import CustomTabsNavigator from './navigators/customTabsNavigator';
-import { ShowProvider, useShow } from './context/ShowContext'; // Import the context
-import {TabProvider } from './context/TabContext'
-const App: React.FC = () => {
-  const [isAuthed, setIsAuthed] = useState(false);
+import { ShowProvider } from './context/ShowContext';
+import { TabProvider } from './context/TabContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
+const App: React.FC = () => {
   return (
-    <ShowProvider>  
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <NavigationContainer>
-          {isAuthed ? 
-          <TabProvider>
-          <CustomTabsNavigator />
-        </TabProvider>
-          : <AppNavigator setIsAuthed={setIsAuthed} />}
-        </NavigationContainer>
-      </GestureHandlerRootView>
-    </ShowProvider>
+    <AuthProvider>
+      <ShowProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <NavigationContainer>
+            <AppContent />
+          </NavigationContainer>
+        </GestureHandlerRootView>
+      </ShowProvider>
+    </AuthProvider>
+  );
+};
+
+// Separate the conditional rendering logic for better readability
+const AppContent: React.FC = () => {
+  const { isAuthed } = useAuth();
+  
+  return isAuthed ? (
+    <TabProvider>
+      <CustomTabsNavigator />
+    </TabProvider>
+  ) : (
+    <AppNavigator />
   );
 };
 

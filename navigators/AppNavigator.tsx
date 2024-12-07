@@ -7,15 +7,13 @@ import VerifyScreen from '../screens/VerifyScreen';
 import ChangePasswordScreen from '../screens/ChangePassword';
 
 const Stack = createStackNavigator();
-interface AppNavigatorProps {
-  setIsAuthed: React.Dispatch<React.SetStateAction<boolean>>;
-}
-const AppNavigator: React.FC<AppNavigatorProps> = ({setIsAuthed }) => {
+
+const AppNavigator: React.FC = () => {
   return (
     <Stack.Navigator initialRouteName="Onboarding">
       <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
       <Stack.Screen name="SignIn" options={{ headerShown: false }}>
-        {(props) => <SignInScreen {...props} setIsAuthed={setIsAuthed} />} 
+        {(props) => <SignInScreen />} 
       </Stack.Screen>
       <Stack.Screen name="ForgotPassword" options={{ headerShown: false }}>
         {(props) => <ForgotPasswordScreen />} 

@@ -4,15 +4,20 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { RootStackParamList } from '../types/navigationTypes';
 import Icon from '../utils/Icons';
+import { useAuth } from '../context/AuthContext';
 
 const ProfileScreen: React.FC = () => {
     type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Profile'>;
     const navigation = useNavigation<ProfileScreenNavigationProp>();
+    const { setIsAuthed } = useAuth();
     const handleGotoMyAccount = () => {
       navigation.navigate('MyAccount'); 
     };
     const handleGotoSettings = () => {
     navigation.navigate('Settings');
+  }
+  const logout = () => {
+    setIsAuthed(false)
   }
   
   return (
@@ -57,7 +62,7 @@ const ProfileScreen: React.FC = () => {
           <Text style={styles.menuText}>Policy privacy</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.menuItem, styles.logoutItem]}>
+        <TouchableOpacity style={[styles.menuItem, styles.logoutItem]} onPress={logout}>
           <View style={styles.iconContainer}>
           <Icon name={'SquareArrowLeft'} size={24} color={ '#ED5757' } />
         </View>
