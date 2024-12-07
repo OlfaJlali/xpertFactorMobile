@@ -44,6 +44,15 @@ export const globalStyles = StyleSheet.create({
     fontSize: 16,
 
   },
+  searchInput: {
+    borderBlockColor: COLOR_BLACK ,
+    borderWidth: 1, 
+    borderRadius: 8,
+    flex:1,
+    height: 40,
+    // backgroundColor:'#fff',
+
+  }
 
   
 

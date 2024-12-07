@@ -1,18 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Animated } from 'react-native';
 import { TabsNavigator } from '../components/BottomSheet'; 
 import DashboardScreen from '../screens/DashboardScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import BordoreauxScreen from '../screens/BordoreauxScreen';
 import { BordereauxStackNavigator } from './BordoreauxStackNavigator';
 import { TabItem } from '../types/BottomSheetTypes';
 import { useShow } from '../context/ShowContext';
 import { useTab } from '../context/TabContext';
 import { ProfileStackNavigator } from './ProfileStackNavigator';
 import { RequestFinancementStackNavigator } from './RequestFinancementStackNavigator';
+import { LitigeStackNavigator } from './LitigeStackNavigator';
+import { useAdditionalTab } from '../context/AdditionalTabContext';
 
 const CustomTabsNavigator: React.FC = () => {
   const { selectedIndex, setSelectedIndex } = useTab();
+  const {selectedIndexBis , setSelectedIndexBis} = useAdditionalTab()
+  
   const { show } = useShow();  
 
   const screens: TabItem[] = [
@@ -21,10 +24,16 @@ const CustomTabsNavigator: React.FC = () => {
     { icon: 'Plus', label: '', component: ProfileScreen}, 
     { icon: 'File', label: 'Bordereaux', component: BordereauxStackNavigator}, 
     { icon: 'Sailboat', label: 'Sailboat', component: RequestFinancementStackNavigator }, 
+    
   ];
+  const AdditionalScreens:  TabItem[] = [
+    { icon: 'Database', label: 'Litige', component: LitigeStackNavigator },
+    { icon: 'User', label: 'Profile', component: ProfileStackNavigator },
 
+  ];
+  const [renderingCurrent , setRenderingCurrent] = useState(true)
   const CurrentScreen = screens[selectedIndex].component;
-
+  const AdditionalScreensRenderer = AdditionalScreens[selectedIndexBis].component;
   const slideAnim = new Animated.Value(100); 
   useEffect(() => {
     if (show) {
@@ -44,13 +53,18 @@ const CustomTabsNavigator: React.FC = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <CurrentScreen />
+      {renderingCurrent ?  <CurrentScreen /> :  <AdditionalScreensRenderer />}
       {show && (
         <Animated.View style={{ transform: [{ translateY: slideAnim }] }}>
           <TabsNavigator
             data={screens}
             selectedIndex={selectedIndex}
             onChange={setSelectedIndex}
+            AdditionalSelectedIndex={selectedIndexBis}
+            onAdditionalChange={setSelectedIndexBis}
+            additionalScreens={AdditionalScreens} // Navigate to a new View
+            setRenderingCurrent={setRenderingCurrent}
+            renderingCurrent={renderingCurrent}
           />
         </Animated.View>
       )}

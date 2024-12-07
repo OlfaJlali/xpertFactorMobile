@@ -1,3 +1,6 @@
+import { BuyerDatatype } from "./buyersDataTypes";
+import { documentsDataTypes } from "./documentsDataTypes";
+
 export type RootStackParamList = {
     Onboarding: undefined;
     SignIn: undefined;
@@ -25,5 +28,8 @@ export type RootStackParamList = {
         selectedYear: number;
         documentCount: number;
     };    
+    Litige : undefined
+    LitigeDocument: BuyerDatatype;
+    LitigeDate: { LitigeDate: { buyerData: BuyerDatatype; document: documentsDataTypes } };
   };
   

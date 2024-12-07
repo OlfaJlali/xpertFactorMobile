@@ -6,6 +6,7 @@ import CustomTabsNavigator from './navigators/customTabsNavigator';
 import { ShowProvider } from './context/ShowContext';
 import { TabProvider } from './context/TabContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { AdditionalTabProvider } from './context/AdditionalTabContext';
 
 const App: React.FC = () => {
   return (
@@ -27,7 +28,9 @@ const AppContent: React.FC = () => {
   
   return isAuthed ? (
     <TabProvider>
-      <CustomTabsNavigator />
+      <AdditionalTabProvider>
+        <CustomTabsNavigator />
+      </AdditionalTabProvider>
     </TabProvider>
   ) : (
     <AppNavigator />

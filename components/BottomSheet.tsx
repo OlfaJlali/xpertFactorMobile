@@ -16,6 +16,11 @@ export function TabsNavigator({
   inactiveBackgroundColor = 'transparent',
   activeColor = '#fff',
   inactiveColor = '#ddd',
+  additionalScreens,
+  setRenderingCurrent,
+  AdditionalSelectedIndex,
+  onAdditionalChange,
+  renderingCurrent
 }: TabsNavigatorProps) {
   const rotation = useRef(new Animated.Value(0)).current;
   const [isExpanded, setIsExpanded] = useState(false); // State to track expansion
@@ -85,23 +90,21 @@ export function TabsNavigator({
 
   return (
     <Shadow 
-  distance={7} // Adjust the distance of the shadow
-  // startColor={"#00000055"} // Customize the shadow color and opacity
-  
+  distance={7}  
   offset={[0, -3]} // Creates a top shadow
   style={{ width: '100%', backgroundColor: '#fff' }}
 >
 <Animated.View style={[styles.container, { height: containerHeight }]}>
       <View style={styles.iconContainer}>
         {data.map((item, index) => {
-          if (index === 2) return <View key={index} style={{ width: 100 }} />;
+          if (index === 2) return <View key={index} style={{ width: 100 }} />
           return (
             <Pressable
               key={index}
-              onPress={() => onChange(index)}
-              style={[styles.navButton, selectedIndex === index ? styles.navButtonSelected : '']}
+              onPress={() =>  { setRenderingCurrent(true) ; onChange(index)}}
+              style={[styles.navButton, (selectedIndex === index  && renderingCurrent === true) ? styles.navButtonSelected : '']}
             >
-              <Icon name={item.icon} size={24} color={selectedIndex === index ? activeColor : /* '#3E77BC' */ '#282534'} />
+              <Icon name={item.icon} size={24} color={(selectedIndex === index  && renderingCurrent  === true)  ? activeColor : /* '#3E77BC' */ '#282534'} />
             </Pressable>
           );
         })}
@@ -117,15 +120,18 @@ export function TabsNavigator({
           },
         ]}
       >
-        {Array.from({ length: 4 }, (_, index) => (
-          <Pressable key={index} onPress={() => console.log(`Button ${index + 1} pressed`)}>
-            <View style={styles.navButton}>
-              <Icon name={'Database'} size={24} color={ '#282534' } />
-            </View>
-          </Pressable>
-        ))}
+        {additionalScreens.map((item, index) => {
+          return (
+            <Pressable
+              key={index}
+              onPress={() => { setRenderingCurrent(false) ; onAdditionalChange(index)}}
+              style={[styles.navButton, (AdditionalSelectedIndex === index  && renderingCurrent === false) ? styles.navButtonSelected : '']}
+            >
+              <Icon name={item.icon} size={24} color={(AdditionalSelectedIndex === index && renderingCurrent === false) ? activeColor : /* '#3E77BC' */ '#282534'} />
+            </Pressable>
+          );
+        })}
       </Animated.View>
-
       <Animated.View style={[styles.fab , {top: -30}]}>
         <TouchableOpacity onPress={handlePress}>
           <Animated.Image

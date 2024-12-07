@@ -17,7 +17,11 @@ export type TabsNavigatorProps = {
     inactiveBackgroundColor?: string;
     activeColor?: string 
     inactiveColor?: string
-
+    additionalScreens: TabItem[];
+    AdditionalSelectedIndex: number;
+    onAdditionalChange: (index: number) => void;
+    setRenderingCurrent: React.Dispatch<React.SetStateAction<boolean>>
+    renderingCurrent: boolean
 };
 
 export type IconProp = {
