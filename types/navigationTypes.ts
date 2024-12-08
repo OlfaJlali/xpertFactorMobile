@@ -31,5 +31,7 @@ export type RootStackParamList = {
     Litige : undefined
     LitigeDocument: BuyerDatatype;
     LitigeDate: { LitigeDate: { buyerData: BuyerDatatype; document: documentsDataTypes } };
+    LimitBuyer: undefined;
+    LimitForm: BuyerDatatype
   };
   

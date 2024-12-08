@@ -141,19 +141,18 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   inputContainer: {
-   backgroundColor: '#1C162E',
-   opacity: 0.9,
+   backgroundColor: '#FFF',
+   opacity: 1,
     padding: 16,
     // borderColor: '#ddd',
     // borderWidth:2,
     borderRadius: 12,
     marginBottom: 16,
-    shadowColor: "#3E77BC",
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    shadowOpacity:  .5,
+    shadowOpacity:  0.19,
     shadowRadius: 5.62,
     elevation: 6
     },
@@ -163,7 +162,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#1AD5AD',
+    color: '#3E77BC',
     marginBottom: 8,
   },
   input: {
@@ -171,8 +170,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     fontSize: 26,
-    color: '#ddd',
-    fontWeight: 'regular'
+    color: '#000',
+    fontWeight: '500'
+    
     // borderColor: '#ddd',
     // borderWidth: 1,
   },

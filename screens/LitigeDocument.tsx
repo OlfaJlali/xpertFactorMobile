@@ -36,6 +36,7 @@ const LitigeDocument = ({ route }: any) => {
   return (
     <SafeAreaView style={styles.container}>
       <SearchList
+      text='please select a document'
         data={filteredData}
         searchQuery={searchQuery}
         onSearch={handleSearch}

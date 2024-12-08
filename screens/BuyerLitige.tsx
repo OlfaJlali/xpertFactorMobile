@@ -7,9 +7,11 @@ import { BuyerDatatype } from '../types/buyersDataTypes';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
-import { COLOR_BLACK, H2_SIZE, H3_SIZE } from '../styles/globalStyles';
-
-const BuyerLitige = () => {
+import { COLOR_BLACK, globalStyles, H2_SIZE, H3_SIZE } from '../styles/globalStyles';
+type BuyerLitigeProps = {
+  handlePress : (item : any) => void
+}
+const BuyerLitige : React.FC<BuyerLitigeProps>= ({handlePress}) => {
   type BuyerLitigenNavigationProp = StackNavigationProp<RootStackParamList, 'LitigeDocument'>;
   const navigation = useNavigation<BuyerLitigenNavigationProp>();
 
@@ -17,14 +19,10 @@ const BuyerLitige = () => {
     buyersData,
     ['firstname', 'lastname']
   );
-
-  const handlePress = (buyer: BuyerDatatype) => {
-    navigation.navigate('LitigeDocument', buyer);
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <SearchList
+      text='please select a buyer'
         data={filteredData}
         searchQuery={searchQuery}
         onSearch={handleSearch}

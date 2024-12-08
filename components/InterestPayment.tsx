@@ -26,8 +26,9 @@ const InterestPayment = ({selectedYear,  setSelectedYear,  date, setDate} :Inter
     return (
     <View style={styles.container}>
       <View style={styles.cardsContainer}>
+        {/* TODO : change color */}
         <LinearGradient
-          colors={['#FDC830', '#F37335']}
+          colors={['#ddd', '#3E77BC']}
           style={[styles.card, styles.gradientCard]}
         >
         <Text style={styles.subtitle}>Bordereau year</Text>
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
   yearText: {
     fontSize: 20,
     textAlign: 'center',
-    color:'#000'
+    color:'#FFF'
   },
   selectedYearText: {
     fontWeight: 'bold', 

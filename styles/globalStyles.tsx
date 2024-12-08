@@ -50,6 +50,7 @@ export const globalStyles = StyleSheet.create({
     borderRadius: 8,
     flex:1,
     height: 40,
+    paddingLeft: 10
     // backgroundColor:'#fff',
 
   }

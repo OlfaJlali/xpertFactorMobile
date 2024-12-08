@@ -11,6 +11,7 @@ import { ProfileStackNavigator } from './ProfileStackNavigator';
 import { RequestFinancementStackNavigator } from './RequestFinancementStackNavigator';
 import { LitigeStackNavigator } from './LitigeStackNavigator';
 import { useAdditionalTab } from '../context/AdditionalTabContext';
+import { LimitStackNavigator } from './LimitStackNavigator';
 
 const CustomTabsNavigator: React.FC = () => {
   const { selectedIndex, setSelectedIndex } = useTab();
@@ -28,7 +29,7 @@ const CustomTabsNavigator: React.FC = () => {
   ];
   const AdditionalScreens:  TabItem[] = [
     { icon: 'Database', label: 'Litige', component: LitigeStackNavigator },
-    { icon: 'User', label: 'Profile', component: ProfileStackNavigator },
+    { icon: 'Minus', label: 'Limit', component: LimitStackNavigator },
 
   ];
   const [renderingCurrent , setRenderingCurrent] = useState(true)

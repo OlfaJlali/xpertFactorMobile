@@ -15,6 +15,7 @@ interface SearchListProps<T> {
   data: T[];
   searchQuery: string;
   onSearch: (query: string) => void;
+  text: string
   renderItem: ({ item }: { item: T }) => JSX.Element;
 }
 
@@ -23,8 +24,11 @@ export const SearchList = <T,>({
   searchQuery,
   onSearch,
   renderItem,
+  text
 }: SearchListProps<T>) => (
   <View style={styles.container}>
+          <Text style={globalStyles.inputTitle}>{text}</Text>
+
     <SearchInput 
     searchQuery={searchQuery}
     onSearch={onSearch}
