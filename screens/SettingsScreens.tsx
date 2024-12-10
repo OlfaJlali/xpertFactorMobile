@@ -4,6 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
 import Icon from '../utils/Icons';
+import { globalStyles } from '../styles/globalStyles';
+import Header from '../components/Header';
 
 const SettingsScreen = () => {
   type SettingScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Settings'>;
@@ -11,6 +13,8 @@ const SettingsScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
+            <Header goBack={() => navigation.pop()} title='Settings' />
+
       <View style={styles.container}>
         <TouchableOpacity 
           style={styles.optionRow} 

@@ -5,6 +5,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView } from 'r
 import { RootStackParamList } from '../types/navigationTypes';
 import Icon from '../utils/Icons';
 import { useAuth } from '../context/AuthContext';
+import { globalStyles } from '../styles/globalStyles';
 
 const ProfileScreen: React.FC = () => {
     type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Profile'>;
@@ -22,8 +23,11 @@ const ProfileScreen: React.FC = () => {
   
   return (
     <SafeAreaView style={styles.safeAreaContainer} >
+
     <View style={styles.container}>
+
       {/* Profile Section */}
+
       <View style={styles.profileContainer}>
       <View style={styles.imageWrapper}>
         <Image

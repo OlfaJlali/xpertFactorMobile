@@ -19,6 +19,8 @@ export const Input: React.FC<InputProps> = ({ placeholder, value, onChangeText, 
       onChangeText={onChangeText}
       secureTextEntry={secureTextEntry}
       keyboardType={keyboardType}
+      
+
     />
   );
 };

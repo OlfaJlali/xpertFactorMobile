@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, SafeAreaView, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
 import { useBordereauxForm } from '../hooks/useBordereauxForm';
-import DateInput from '../components/DateInput';
 import { TextInput } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import TransactionList from '../components/DocumentsNumber';
@@ -12,6 +11,7 @@ import InterestPayment from '../components/InterestPayment';
 import Counter from './counter';
 import DocsAndAmountFom from '../components/DocsAndAmountFom';
 import { globalStyles } from '../styles/globalStyles';
+import Header from '../components/Header';
 type VerifyScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
 
 const BordereauxScreen: React.FC = () => {
@@ -68,8 +68,10 @@ useEffect(() => {
 
   return (
     <SafeAreaView style={styles.container}>
+
     {/* <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}> */}
     <Text style={globalStyles.PageTitle}>Bordereau</Text>
+
 
     <View style={styles.container}>
 
@@ -115,6 +117,7 @@ useEffect(() => {
         <Text style={styles.saveButtonText}>Save</Text>
       </TouchableOpacity> 
     </View>
+
      </SafeAreaView>
   );
 };

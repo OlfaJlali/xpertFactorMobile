@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
 import { View, Text, Switch, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { globalStyles } from '../styles/globalStyles';
+import Header from '../components/Header';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../types/navigationTypes';
 
 const NotificationsScreen = () => {
   const [isEnabled1, setIsEnabled1] = useState(true);
   const [isEnabled2, setIsEnabled2] = useState(false);
   const [isEnabled3, setIsEnabled3] = useState(false);
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Notifications'>>();
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
-    
+        <Header goBack={() => navigation.pop()} title='Notifications' />
+
+
     <View style={styles.container}>
       <View style={styles.notificationRow}>
         <Text style={styles.notificationText}>Notification type 1</Text>

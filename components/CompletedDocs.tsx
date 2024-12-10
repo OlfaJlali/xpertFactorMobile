@@ -31,16 +31,8 @@ const Progress = ({documentCount , progress} : ProgressIndicatorProps) => {
 const styles = StyleSheet.create({
   container: {
     borderRadius:20,
-    padding: 20,
+    paddingBottom: 20,
     backgroundColor: '#ffffff',
-    // shadowColor: "#000000",
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 1,
-    // },
-    // shadowOpacity:  0.19,
-    // shadowRadius: 2.62,
-    // elevation: 4
   },
   title: {
     fontSize: 18,
@@ -72,7 +64,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   percentageText: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: 'bold',
     color: '#2E2E3A',
   },

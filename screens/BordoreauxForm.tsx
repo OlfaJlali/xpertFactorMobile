@@ -3,7 +3,6 @@ import React, { useRef, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, Dimensions } from 'react-native';
 import { RootStackParamList } from '../types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
-import DateInput from '../components/DateInput';
 import Progress from '../components/CompletedDocs';
 import { DashboardScreenStyles } from '../styles/DashboardScreenStyles';
 import DatePicker from 'react-native-date-picker';
@@ -12,6 +11,7 @@ import { Input } from '../components/TextInput';
 import Counter from './counter';
 import DocsAndAmountFom from '../components/DocsAndAmountFom';
 import { globalStyles } from '../styles/globalStyles';
+import Header from '../components/Header';
 
 type BordoreauxFormRouteProp = RouteProp<RootStackParamList, 'BordoreauxForm'>;
 const { width } = Dimensions.get('window');
@@ -71,9 +71,10 @@ const BordoreauxFormScreen: React.FC<BordereauxFormProps> = ({ route }) => {
   return (
    <SafeAreaView style={styles.safeAreaContainer}>
     <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
+      <Header goBack={() => navigation.pop()} title='Bordereau' />
 
       <View style={styles.container}>
-      <Text style={globalStyles.PageTitle}>Bordereau</Text>
+
 
         <Progress documentCount={documentCount} progress={progress} />
 <View style={{ backgroundColor: '#FFF',
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FFF' ,
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20
     // backgroundColor: '#F9F9F9',
   },
   progressContainer: {

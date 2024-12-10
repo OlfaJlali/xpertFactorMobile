@@ -30,17 +30,17 @@ const BordoreauxStarter = () => {
       </View>
 
       {/* Content */}
-      <Text style={styles.title}>Start managing your bordoreaux and stay up to date.</Text>
+      <Text style={styles.title}>Start managing your bordereau and stay up to date.</Text>
       <View style={styles.item}>
         {/* <Icon name="zap" size={18} color="#FFC107" style={styles.icon} /> */}
         <Text style={styles.description}>
-          choose and the desired amount, number of documents date and year
+          choose and the desired amount, number of documents date and year.
         </Text>
       </View>
       <View style={styles.item}>
         {/* <Icon name="zap" size={18} color="#FFC107" style={styles.icon} /> */}
         <Text style={styles.description}>
-          Set every document infos and scan the document
+          Set every document infos and scan the document.
         </Text>
       </View> 
       <Button title={'got it'} onPress={goToBordoreaux} disabled={false} />

@@ -31,6 +31,13 @@ export const globalStyles = StyleSheet.create({
     paddingLeft: 10 ,
     color: COLOR_MAIN,
   },
+  ProfilePageTitle: {
+    fontSize: H1_SIZE,
+    fontWeight: FONTWEIGHT_BOLD,
+    paddingBottom: 30 ,
+    // paddingLeft: 20 ,
+    color: COLOR_MAIN,
+  },
   inputTitle: {
     fontSize: H3_SIZE,
     fontWeight: FONTWEIGHT_BOLD,

@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   YearTextDark: {
-    fontSize: 50,
+    fontSize: 45,
     fontWeight: 'bold',
     color: '#3E77BC',
   },

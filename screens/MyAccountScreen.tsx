@@ -6,6 +6,9 @@ import { isValidEmail } from '../utils/validation';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
+import { globalStyles } from '../styles/globalStyles';
+import Icon from '../utils/Icons';
+import Header from '../components/Header';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 
 const MyAccountScreen = () => {
@@ -36,6 +39,7 @@ const MyAccountScreen = () => {
 
   return (
      <SafeAreaView style={styles.safeAreaContainer} >
+      <Header goBack={() => navigation.pop()} title='My Account' />
     <View style={styles.container}>
       {/* Header */}
   

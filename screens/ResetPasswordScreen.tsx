@@ -1,38 +1,75 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  Dimensions,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import { Input } from '../components/TextInput';
 import { Button } from '../components/Button';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
+import { globalStyles } from '../styles/globalStyles';
+import Header from '../components/Header';
 
 const ResetPasswordScreen = () => {
-  const [oldPassword , setOldPassword] = useState('')
-  const [newPassword , setNewPassword] = useState('')
-  const [newPasswordRetype , SetnewPasswordRetype] = useState('')
-  const { width  , height} = Dimensions.get('window');
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newPasswordRetype, setNewPasswordRetype] = useState('');
+  const { width , height } = Dimensions.get('window');
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'ResetPassword'>>();
 
-  const handleSafe = () =>{ 
-    // TO DO Conditions to check 
-      // password valid  ??? 
-          // backend
-
-      // new pass = new pass retry
-      // new pass = must have at least 6 chars and a number 
+  const handleSafe = () => {
+    // TODO: Add validation logic here
     navigation.navigate('Profile');
+  };
 
-  } 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
-    <View style={styles.container}>
-      <Image source={require('../assets/login.png')} style={{ height: '50%' , width: width }} />
-      <Input placeholder="Enter old password" onChangeText={setOldPassword} secureTextEntry value={oldPassword}  />
-      <Input placeholder="Enter new password" onChangeText={setNewPassword} secureTextEntry value={newPassword}  />
-      <Input placeholder="Retype new password" onChangeText={SetnewPasswordRetype} secureTextEntry value={newPasswordRetype}  />
-      <Button title={'Save'} onPress={handleSafe} disabled={false} />
-    </View>
+            <Header goBack={() => navigation.pop()} title='Reset Password' />
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoidingView}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        {/* Add ScrollView */}
+        <ScrollView
+          contentContainerStyle={styles.scrollViewContent}
+          keyboardShouldPersistTaps="handled">
+          <View style={styles.container }>
+            <View  style={{alignItems: 'center' , }}>
+            <Image
+              source={require('../assets/login2.png')}
+              style={{ width: width /3 ,  height: width * 0.5  }} // Set height based on width
+              />
+
+            </View>
+            <Input
+              placeholder="Enter old password"
+              onChangeText={setOldPassword}
+              secureTextEntry
+              value={oldPassword}
+            />
+            <Input
+              placeholder="Enter new password"
+              onChangeText={setNewPassword}
+              secureTextEntry
+              value={newPassword}
+            />
+            <Input
+              placeholder="Retype new password"
+              onChangeText={setNewPasswordRetype}
+              secureTextEntry
+              value={newPasswordRetype}
+            />
+            <Button title="Save" onPress={handleSafe} disabled={false} />
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -42,9 +79,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  scrollViewContent: {
+    flexGrow: 1, // Ensures ScrollView content takes up available space
+  },
   container: {
-    gap:20,
-    paddingTop: 20,
+    gap: 20,
     backgroundColor: '#fff',
     paddingHorizontal: 20,
     justifyContent: 'center',
