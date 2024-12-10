@@ -30,14 +30,14 @@ const ChangePasswordScreen: React.FC = () => {
       <View style={signInScreenStyles.centeredContainer}>
         {/* Input for new password */}
         <Input 
-          placeholder="Password" 
+          placeholder="New Password" 
           value={password} 
           onChangeText={setPassword} 
           secureTextEntry 
         />
         {/* Input for verifying password */}
         <Input 
-          placeholder="Verify Password" 
+          placeholder="Verify New Password" 
           value={verifyPassword} 
           onChangeText={setVerifyPassword} 
           secureTextEntry 

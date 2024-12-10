@@ -4,14 +4,14 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, SafeAr
 import { RootStackParamList } from '../types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import DateInput from '../components/DateInput';
-import BuyTokens from '../components/CompletedDocs';
+import Progress from '../components/CompletedDocs';
 import { DashboardScreenStyles } from '../styles/DashboardScreenStyles';
 import DatePicker from 'react-native-date-picker';
 import BordorauxDates from '../components/BordorauxDates';
 import { Input } from '../components/TextInput';
-import CurrencyInput from '../components/CurrencyInput';
 import Counter from './counter';
 import DocsAndAmountFom from '../components/DocsAndAmountFom';
+import { globalStyles } from '../styles/globalStyles';
 
 type BordoreauxFormRouteProp = RouteProp<RootStackParamList, 'BordoreauxForm'>;
 const { width } = Dimensions.get('window');
@@ -71,8 +71,11 @@ const BordoreauxFormScreen: React.FC<BordereauxFormProps> = ({ route }) => {
   return (
    <SafeAreaView style={styles.safeAreaContainer}>
     <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
+
       <View style={styles.container}>
-        <BuyTokens documentCount={documentCount} progress={progress} />
+      <Text style={globalStyles.PageTitle}>Bordereau</Text>
+
+        <Progress documentCount={documentCount} progress={progress} />
 <View style={{ backgroundColor: '#FFF',
     padding: 20,
     borderRadius: 15,

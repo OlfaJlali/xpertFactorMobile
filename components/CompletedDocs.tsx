@@ -7,7 +7,7 @@ type ProgressIndicatorProps = {
   documentCount : number,
   progress: number
 }
-const BuyTokens = ({documentCount , progress} : ProgressIndicatorProps) => {
+const Progress = ({documentCount , progress} : ProgressIndicatorProps) => {
   return (
     <View style={styles.container}>
 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -78,4 +78,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BuyTokens;
+export default Progress;

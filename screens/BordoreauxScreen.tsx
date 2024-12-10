@@ -11,6 +11,7 @@ import TransactionList from '../components/DocumentsNumber';
 import InterestPayment from '../components/InterestPayment';
 import Counter from './counter';
 import DocsAndAmountFom from '../components/DocsAndAmountFom';
+import { globalStyles } from '../styles/globalStyles';
 type VerifyScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
 
 const BordereauxScreen: React.FC = () => {
@@ -68,7 +69,10 @@ useEffect(() => {
   return (
     <SafeAreaView style={styles.container}>
     {/* <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}> */}
+    <Text style={globalStyles.PageTitle}>Bordereau</Text>
+
     <View style={styles.container}>
+
     <Text style={styles.sectionTitle}>Mode of Payment</Text>
       <View style={styles.inputContainer} >
         <Text style={styles.label}>Enter amount</Text>

@@ -1,6 +1,8 @@
 import { StyleSheet } from 'react-native';
 
 export const COLOR_BLACK = '#000'
+export const COLOR_MAIN = '#3E77BC'
+
 export const FONTWEIGHT_BOLD = 'bold'
 export const H1_SIZE = 25
 export const H2_SIZE = 18
@@ -21,6 +23,13 @@ export const globalStyles = StyleSheet.create({
     paddingVertical: 20 ,
     color: COLOR_BLACK
 
+  },
+  PageTitle: {
+    fontSize: H1_SIZE,
+    fontWeight: FONTWEIGHT_BOLD,
+    paddingBottom: 30 ,
+    paddingLeft: 10 ,
+    color: COLOR_MAIN,
   },
   inputTitle: {
     fontSize: H3_SIZE,

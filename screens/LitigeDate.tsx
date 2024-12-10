@@ -29,6 +29,8 @@ const LitigeDate = ({ route }: any) => {
         paddingTop: 20
         
     }}>
+                  <Text style={globalStyles.PageTitle}>Litige</Text>
+
        <View style={{paddingHorizontal: 20}}>
        <View>
                 <Text style={[globalStyles.inputTitle]}>Litige Type</Text>

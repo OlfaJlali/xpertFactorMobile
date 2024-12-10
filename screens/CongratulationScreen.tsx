@@ -7,20 +7,15 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
 import { useTab } from '../context/TabContext';
 const { height } = Dimensions.get('window');
-
-const CongratulationsScreen = () => {
+type CongratulationsScreenProps = {
+  onPress : () => void
+  text: string
+}
+const CongratulationsScreen : React.FC<CongratulationsScreenProps> = ({onPress , text}) => {
   const { setShow } = useShow();  
-  const { setSelectedIndex } = useTab();
   useEffect(()=> {
     setShow(false)
   },[])
-  type CongratsSreenNavigationProps = StackNavigationProp<RootStackParamList, 'Dashboard'>;
-  const navigation = useNavigation<CongratsSreenNavigationProps>();
-  const goToDashboard = () => {
-    //TO-CHANGE
-    setSelectedIndex(0); 
-    setShow(true)
-    };
   return (
     <View style={styles.container}>
       <View style={styles.characterWrapper}>
@@ -32,9 +27,9 @@ const CongratulationsScreen = () => {
       <View style={styles.bottomSection}>
         <Text style={styles.title}>Congratulations!</Text>
         <Text style={styles.subtitle}>
-           You managed to update 2 documents
+           {text}
         </Text>
-        <Button title="Done" onPress={goToDashboard} disabled={false} />
+        <Button title="Done" onPress={onPress} disabled={false} />
 
       </View>
     </View>

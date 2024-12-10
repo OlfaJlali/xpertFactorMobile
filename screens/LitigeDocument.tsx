@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { SearchList } from '../components/SearchList';
-import { COLOR_BLACK, H1_SIZE, H2_SIZE, H3_SIZE } from '../styles/globalStyles';
+import { COLOR_BLACK, globalStyles, H1_SIZE, H2_SIZE, H3_SIZE } from '../styles/globalStyles';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';  // Ensure RootStackParamList is correctly typed
 import { BuyerDatatype } from '../types/buyersDataTypes';
@@ -35,6 +35,7 @@ const LitigeDocument = ({ route }: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Text style={globalStyles.PageTitle}>Litige</Text>
       <SearchList
       text='please select a document'
         data={filteredData}

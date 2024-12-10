@@ -39,6 +39,7 @@ const RequestLimit = () => {
         showsVerticalScrollIndicator={false}
         >
  <View style={{paddingHorizontal: 20}}>
+ <Text style={globalStyles.PageTitle}>Limit</Text>
         <View >
                 <Text style={globalStyles.inputTitle}>Request Date</Text>
                 <TouchableOpacity onPress={() => setIsOpenRequestDate(!isOpenRequestDate)}>

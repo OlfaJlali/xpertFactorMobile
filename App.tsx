@@ -7,6 +7,7 @@ import { ShowProvider } from './context/ShowContext';
 import { TabProvider } from './context/TabContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AdditionalTabProvider } from './context/AdditionalTabContext';
+import { RenderingProvider } from './context/RenderingContext';
 
 const App: React.FC = () => {
   return (
@@ -29,7 +30,9 @@ const AppContent: React.FC = () => {
   return isAuthed ? (
     <TabProvider>
       <AdditionalTabProvider>
+      <RenderingProvider>
         <CustomTabsNavigator />
+      </RenderingProvider>
       </AdditionalTabProvider>
     </TabProvider>
   ) : (

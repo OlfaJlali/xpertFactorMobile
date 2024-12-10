@@ -4,6 +4,7 @@ import { IconProp, TabsNavigatorProps } from '../types/BottomSheetTypes';
 import { useRef, useState } from 'react';
 import {Shadow} from 'react-native-shadow-2';
 import Icon from '../utils/Icons';
+import { useRendering } from '../context/RenderingContext';
 
 const { width } = Dimensions.get('window');
 
@@ -17,13 +18,12 @@ export function TabsNavigator({
   activeColor = '#fff',
   inactiveColor = '#ddd',
   additionalScreens,
-  setRenderingCurrent,
   AdditionalSelectedIndex,
   onAdditionalChange,
-  renderingCurrent
 }: TabsNavigatorProps) {
   const rotation = useRef(new Animated.Value(0)).current;
   const [isExpanded, setIsExpanded] = useState(false); // State to track expansion
+  const {renderingCurrent, setRenderingCurrent } = useRendering();
 
   // Animated values for the additional buttons and height
   const buttonOpacity = useRef(new Animated.Value(0)).current;

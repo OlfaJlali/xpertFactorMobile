@@ -10,8 +10,9 @@ import { RootStackParamList } from '../types/navigationTypes';
 import { COLOR_BLACK, globalStyles, H2_SIZE, H3_SIZE } from '../styles/globalStyles';
 type BuyerLitigeProps = {
   handlePress : (item : any) => void
+  pageTitle : string
 }
-const BuyerLitige : React.FC<BuyerLitigeProps>= ({handlePress}) => {
+const BuyerLitige : React.FC<BuyerLitigeProps>= ({handlePress , pageTitle}) => {
   type BuyerLitigenNavigationProp = StackNavigationProp<RootStackParamList, 'LitigeDocument'>;
   const navigation = useNavigation<BuyerLitigenNavigationProp>();
 
@@ -21,6 +22,8 @@ const BuyerLitige : React.FC<BuyerLitigeProps>= ({handlePress}) => {
   );
   return (
     <SafeAreaView style={styles.container}>
+          <Text style={globalStyles.PageTitle}>{pageTitle}</Text>
+
       <SearchList
       text='please select a buyer'
         data={filteredData}

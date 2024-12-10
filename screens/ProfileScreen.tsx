@@ -59,7 +59,7 @@ const ProfileScreen: React.FC = () => {
           <View style={styles.iconContainer}>
           <Icon name={'Lock'} size={24} color={ '#282534' } />
           </View>
-          <Text style={styles.menuText}>Policy privacy</Text>
+          <Text style={styles.menuText}>Privacy Policy</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.menuItem, styles.logoutItem]} onPress={logout}>

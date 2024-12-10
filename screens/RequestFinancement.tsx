@@ -31,9 +31,11 @@ const RequestFinancement = () => {
   return (
     <SafeAreaView style={{    flex: 1,
         backgroundColor: '#fff',
-        paddingTop: 20
+        paddingTop: 20,
+        
         
     }}>
+        <Text style={globalStyles.PageTitle}>Financement</Text>
         <View style={{paddingHorizontal: 20}}>
         <Text style={globalStyles.inputTitle}>Financement type</Text>
 
