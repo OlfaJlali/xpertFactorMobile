@@ -30,7 +30,6 @@ const CardsSliderItem = ({ index, item, scrollX }: CardsSliderItems) => {
               width: 0,
               height: 7,
             },
-            shadowOpacity: 0.7,
             shadowRadius: 8,
             elevation: 10,
             }}/>

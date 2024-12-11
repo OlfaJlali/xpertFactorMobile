@@ -88,33 +88,25 @@ useEffect(() => {
     return animations;
   };
   
-  useEffect(() => {
-    // Animate container fade-in
-    Animated.timing(containerAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-    Animated.sequence(createPulseSequence(1)).start();
+  // useEffect(() => {
+  //   // Animate container fade-in
+  //   Animated.timing(containerAnim, {
+  //     toValue: 1,
+  //     duration: 500,
+  //     useNativeDriver: true,
+  //   }).start();
 
     
-  }, []);
+  // }, []);
 
   return (
-    <Animated.View
-    style={[
-      styles.container,
-      {
-        opacity: containerAnim,
-        transform: [{ translateY: containerAnim.interpolate({ inputRange: [0, 1], outputRange: [50, 0] }) }],
-      },
-    ]}
-  >
+    <View style={styles.container}>
 
           <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.container}>
-                  <Text style={globalStyles.PageTitle}>Bordereau</Text>
+                 
+                  <Text style={[globalStyles.PageTitle, {paddingTop: 20}]}>Bordereau</Text>
 
 
 <View >
@@ -159,20 +151,11 @@ setSelectedYear={setSelectedYear}
 date={date}
 setDate={setDate}
 />     
-<TouchableOpacity onPress={handleGoToForm}>
-
-  <Animated.View
-          style={[
-            styles.saveButton,
-            {
-              transform: [{ scale: saveButtonAnim }],
-            },
-          ]}
-        >
-            <Text style={styles.saveButtonText}>Save</Text>
-        </Animated.View>
-        </TouchableOpacity>
-
+<View>
+      <TouchableOpacity style={styles.saveButton} onPress={handleGoToForm}>
+          <Text style={styles.saveButtonText}>Save</Text>
+        </TouchableOpacity> 
+      </View>
 </View>
 
     {/* <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}> */}
@@ -181,7 +164,7 @@ setDate={setDate}
 
 
 
-</Animated.View>
+</View>
   );
 };
 
@@ -202,7 +185,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 12
     // paddingTop: 40,
   },
   horizontalContainer: {

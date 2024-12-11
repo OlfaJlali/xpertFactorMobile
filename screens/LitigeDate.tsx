@@ -35,13 +35,10 @@ const LitigeDate = ({ route }: any) => {
 
        <View style={{paddingHorizontal: 20}}>
        <View>
-                <Text style={[globalStyles.inputTitle]}>Litige Type</Text>
-                    <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ paddingHorizontal: 10 }} 
-                    style={globalStyles.HorizontalScrollView}>
-                        <View style={{ gap: 16 , display: 'flex' , flexDirection:'row' }}>
+       <Text style={[globalStyles.inputTitle]}>Litige Type</Text>
+
+                        <View style={{ gap: 16 , display: 'flex' , flexDirection:'row' ,paddingBottom: 16 , alignSelf: 'center' }}>
+
                         <Tab
                         title="Achat"
                         isActive={selectedType === 'Achat'}
@@ -65,7 +62,6 @@ const LitigeDate = ({ route }: any) => {
                         />
                         </View>
                         
-                    </ScrollView>
                     
 
         </View>

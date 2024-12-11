@@ -15,6 +15,7 @@ import { LimitStackNavigator } from './LimitStackNavigator';
 import { TabItem } from '../types/BottomSheetTypes';
 import { ProrogationStackNavigator } from './ProrogationStackNavigator';
 import { BuyerStackNavigator } from './BuyerStackNavigator';
+import StatisticsScreen from '../screens/StatisticsScreen';
 
 const CustomTabsNavigator: React.FC = () => {
   const { selectedIndex, setSelectedIndex } = useTab();
@@ -34,6 +35,8 @@ const CustomTabsNavigator: React.FC = () => {
     { icon: 'CalendarClock', label: 'Limit', component: LimitStackNavigator },
     { icon: 'UserPlus', label: 'Add buyer', component: BuyerStackNavigator },
     { icon: 'FileClock', label: 'Prorogation', component: ProrogationStackNavigator },
+    { icon: 'ChartPie', label: 'Prorogation', component: StatisticsScreen },
+
 
 
   ];

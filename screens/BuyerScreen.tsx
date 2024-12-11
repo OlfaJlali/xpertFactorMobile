@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Animated } from 'react-native';
 import { useSearch } from '../hooks/useSearch';
 import { SearchList } from '../components/SearchList';
 import { buyersData } from '../data/buyers';
@@ -17,6 +17,16 @@ const Buyer : React.FC= () => {
     buyersData,
     ['firstname', 'lastname']
   );
+  const slideAnim = useRef(new Animated.Value(50)).current; // Start off-screen (50px below)
+
+  useEffect(() => {
+    Animated.timing(slideAnim, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [slideAnim]);
+
   return (
     <SafeAreaView style={styles.container}>
 
@@ -24,12 +34,14 @@ const Buyer : React.FC= () => {
 
       <SearchList
         addIcon={true}
-        text='please select a buyer'
+        text='please add a buyer'
         data={filteredData}
         searchQuery={searchQuery}
         onSearch={handleSearch}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => console.log('pressed on buyer')} style={styles.itemContainer}>
+          <Animated.View style={[styles.itemContainer, { transform: [{ translateY: slideAnim }] }]}>
+
+          <TouchableOpacity onPress={() => console.log('pressed on buyer')} style={styles.itemContent}>
             <View style={styles.itemContent}>
               <Image
                 source={require('../assets/profile.png')}
@@ -40,6 +52,7 @@ const Buyer : React.FC= () => {
               </Text>
             </View>
           </TouchableOpacity>
+          </Animated.View>
         )}
       />
     </SafeAreaView>

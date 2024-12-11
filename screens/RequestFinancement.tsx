@@ -35,8 +35,9 @@ const RequestFinancement = () => {
         
         
     }}>
-        <Text style={globalStyles.PageTitle}>Financement</Text>
         <View style={{paddingHorizontal: 20}}>
+        <Text style={[globalStyles.PageTitle]}>Financement</Text>
+
         <Text style={globalStyles.inputTitle}>Financement type</Text>
 
       <View style={listDashboardTabsStyles.tabContainer}>

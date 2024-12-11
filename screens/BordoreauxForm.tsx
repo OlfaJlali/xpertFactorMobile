@@ -12,6 +12,13 @@ import Counter from './counter';
 import DocsAndAmountFom from '../components/DocsAndAmountFom';
 import { globalStyles } from '../styles/globalStyles';
 import Header from '../components/Header';
+import { launchImageLibrary as _launchImageLibrary, launchCamera as _launchCamera, ImageLibraryOptions, MediaType } from 'react-native-image-picker';
+let launchImageLibrary = _launchImageLibrary;
+let launchCamera = _launchCamera;
+interface DocumentImages {
+  uri: string;
+}
+import { Alert } from 'react-native';
 
 type BordoreauxFormRouteProp = RouteProp<RootStackParamList, 'BordoreauxForm'>;
 const { width } = Dimensions.get('window');
@@ -22,6 +29,7 @@ interface BordereauxFormProps {
 }
 const BordoreauxFormScreen: React.FC<BordereauxFormProps> = ({ route }) => {
   const { totalAmount, date, selectedYear, documentCount } = route.params;
+  const [takingPics,setTakingPics] = useState(0)
   const [progress, setProgress] = useState(1);
   const [documentsData, setDocumentsData] = useState<any[]>([]);
   const [documentType, setDocumentType] = useState('Facture');
@@ -30,13 +38,126 @@ const BordoreauxFormScreen: React.FC<BordereauxFormProps> = ({ route }) => {
   const [dueDate, setDueDate] = useState(new Date());
   const [documentDate, setDocumentDate] = useState(new Date);
   const [amount, setAmount] = useState('');
-
+const [selectedScanType, setSelectedScanType] = useState('')
   type VerifyScreenNavigationProp = StackNavigationProp<RootStackParamList, 'BordoreauxForm'>;
   const navigation = useNavigation<VerifyScreenNavigationProp>();
 
   const handleDocumentTypeChange = (type: string) => setDocumentType(type);
   const handlePaymentModeChange = (mode: string) => setPaymentMode(mode);
   const scrollViewRef = useRef<ScrollView>(null);
+  const openImagePicker = () => {
+    const options: ImageLibraryOptions = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+      selectionLimit: documentCount, // Allow selecting multiple images up to the document count
+    };
+  
+    launchImageLibrary(options, handleResponse);
+  };
+  
+  const handleCameraLaunch = () => {
+    if (takingPics >= documentCount) {
+      Alert.alert(
+        'Limit Reached',
+        `You can only take up to ${documentCount} pictures.`
+      );
+      return;
+    }
+  
+    const options: ImageLibraryOptions = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+  
+    launchCamera(options, (response) => {
+
+      if (response.didCancel) {
+        console.log('User cancelled the camera.');
+      } else if (response.errorMessage) {
+        console.log('Camera error:', response.errorMessage);
+      } else {
+  
+        setTakingPics((prevCount) => {
+          const newImageCount = prevCount + 1; // Correctly increment the state
+  
+          console.log(`Picture taken! Current count: ${newImageCount}`);
+  
+          if (newImageCount < documentCount) {
+            // Automatically reopen the camera if more pictures are needed
+            handleCameraLaunch();
+          } else {
+            console.log('All pictures taken.');
+            setTimeout(() => {
+              navigation.navigate('Congratulations');
+            }, 100); // Add a slight delay to avoid conflicts
+        
+          }
+  
+          return newImageCount; // Return the updated state
+        });
+  
+  
+      }
+    });
+  };
+  
+  
+  const handleResponse = (response: any) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.errorMessage) {
+      console.log('Image picker error: ', response.errorMessage);
+    } else {
+      const selectedImages = response.assets || [response]; // Ensure assets array exists
+      const imageUris = selectedImages.map((asset: any) => asset.uri); // Extract URIs
+  
+      const newImageCount = takingPics + imageUris.length;
+  
+      if (newImageCount <= documentCount) {
+        setTakingPics(newImageCount); // Update taken/selected pictures count
+        console.log('Images selected:', imageUris);
+  
+        if (newImageCount === documentCount) {
+          console.log('All images captured or selected.');
+          navigation.navigate('Congratulations'); // Proceed to next screen
+        }
+      } else {
+        console.log(
+          `Exceeded document count. Maximum allowed is ${documentCount}, but ${newImageCount} images were selected.`
+        );
+        Alert.alert('Error', `You can only select up to ${documentCount} images.`);
+      }
+    }
+  };
+  
+  const openImagePickerOptions = () => {
+    Alert.alert(
+      'Choose an Option',
+      'Select how you want to scan your documents',
+      [
+        {
+          text: 'Camera',
+          onPress: handleCameraLaunch, // Opens the camera
+        },
+        {
+          text: 'Gallery',
+          onPress: openImagePicker, // Opens the gallery
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+  
+  // Ensure to initialize the state properly
+  
   const handleNext = () => {
     // Save the current document data
     const newDocument = {
@@ -47,6 +168,7 @@ const BordoreauxFormScreen: React.FC<BordereauxFormProps> = ({ route }) => {
       documentDate,
       amount,
     };
+
 
     // Update documents array
     setDocumentsData((prev) => [...prev, newDocument]);
@@ -63,7 +185,7 @@ const BordoreauxFormScreen: React.FC<BordereauxFormProps> = ({ route }) => {
     } else {
       const allDocuments = [...documentsData, newDocument]; // Manually append the new document to the previous ones
     console.log('All documents:', allDocuments);
-    navigation.navigate('Congratulations');
+    openImagePickerOptions()
 
     }
   };
@@ -71,6 +193,8 @@ const BordoreauxFormScreen: React.FC<BordereauxFormProps> = ({ route }) => {
   return (
    <SafeAreaView style={styles.safeAreaContainer}>
     <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
+    {/* <View style={{paddingTop: 20}}>
+      </View> */}
       <Header goBack={() => navigation.pop()} title='Bordereau' />
 
       <View style={styles.container}>
@@ -149,7 +273,7 @@ const BordoreauxFormScreen: React.FC<BordereauxFormProps> = ({ route }) => {
         />
         {/* Next Button */}
         <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-          <Text style={styles.nextButtonText}>Next</Text>
+          <Text style={styles.nextButtonText}>{progress < documentCount ? 'Next' : 'Scan documents'} </Text>
         </TouchableOpacity>
       </View>
       </ScrollView>
