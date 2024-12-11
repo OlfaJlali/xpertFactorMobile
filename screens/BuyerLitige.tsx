@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Animated } from 'react-native';
 import { useSearch } from '../hooks/useSearch';
 import { SearchList } from '../components/SearchList';
 import { buyersData } from '../data/buyers';
@@ -8,10 +8,12 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
 import { COLOR_BLACK, globalStyles, H2_SIZE, H3_SIZE } from '../styles/globalStyles';
+
 type BuyerLitigeProps = {
   handlePress : (item : any) => void
   pageTitle : string
 }
+
 const BuyerLitige : React.FC<BuyerLitigeProps>= ({handlePress , pageTitle}) => {
   type BuyerLitigenNavigationProp = StackNavigationProp<RootStackParamList, 'LitigeDocument'>;
   const navigation = useNavigation<BuyerLitigenNavigationProp>();
@@ -20,18 +22,29 @@ const BuyerLitige : React.FC<BuyerLitigeProps>= ({handlePress , pageTitle}) => {
     buyersData,
     ['firstname', 'lastname']
   );
+
+  const slideAnim = useRef(new Animated.Value(50)).current; // Start off-screen (50px below)
+
+  useEffect(() => {
+    Animated.timing(slideAnim, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [slideAnim]);
+
   return (
     <SafeAreaView style={styles.container}>
-          <Text style={globalStyles.PageTitle}>{pageTitle}</Text>
+      <Text style={globalStyles.PageTitle}>{pageTitle}</Text>
 
       <SearchList
-      text='please select a buyer'
+        text='please select a buyer'
         data={filteredData}
         searchQuery={searchQuery}
         onSearch={handleSearch}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handlePress(item)} style={styles.itemContainer}>
-            <View style={styles.itemContent}>
+          <Animated.View style={[styles.itemContainer, { transform: [{ translateY: slideAnim }] }]}>
+            <TouchableOpacity onPress={() => handlePress(item)} style={styles.itemContent}>
               <Image
                 source={require('../assets/profile.png')}
                 style={styles.profileImage}
@@ -39,8 +52,8 @@ const BuyerLitige : React.FC<BuyerLitigeProps>= ({handlePress , pageTitle}) => {
               <Text style={styles.nameText}>
                 {item.firstname} {item.lastname}
               </Text>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </Animated.View>
         )}
       />
     </SafeAreaView>

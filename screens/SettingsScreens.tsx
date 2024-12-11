@@ -13,9 +13,12 @@ const SettingsScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
-            <Header goBack={() => navigation.pop()} title='Settings' />
+      <View style={{paddingTop: 20}}>
+      <Header goBack={() => navigation.pop()} title='Settings' />
+      </View>
 
       <View style={styles.container}>
+
         <TouchableOpacity 
           style={styles.optionRow} 
           onPress={() => navigation.navigate('ResetPassword')}

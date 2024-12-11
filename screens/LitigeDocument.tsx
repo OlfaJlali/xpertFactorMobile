@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Animated } from 'react-native';
 import { SearchList } from '../components/SearchList';
 import { COLOR_BLACK, globalStyles, H1_SIZE, H2_SIZE, H3_SIZE } from '../styles/globalStyles';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../types/navigationTypes';  // Ensure RootStackParamList is correctly typed
+import { RootStackParamList } from '../types/navigationTypes'; 
 import { BuyerDatatype } from '../types/buyersDataTypes';
 import { useSearch } from '../hooks/useSearch';
 import { documentsDataTypes } from '../types/documentsDataTypes';
@@ -40,6 +40,15 @@ const LitigeDocument = ({ route  }: any ) => {
 
     }
   };
+  const slideAnim = useRef(new Animated.Value(50)).current; // Start off-screen (50px below)
+
+  useEffect(() => {
+    Animated.timing(slideAnim, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [slideAnim]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,6 +60,7 @@ const LitigeDocument = ({ route  }: any ) => {
         searchQuery={searchQuery}
         onSearch={handleSearch}
         renderItem={({ item }) => (
+          <Animated.View style={ { transform: [{ translateY: slideAnim }]}}>
           
           <TouchableOpacity onPress={() => handlePress(item)} style={styles.itemContainer}>
             <View style={styles.itemContent}>
@@ -71,6 +81,7 @@ const LitigeDocument = ({ route  }: any ) => {
               <Text style={styles.detailsText}>OUVERT: {item.ouvert}</Text>
             </View>
           </TouchableOpacity>
+          </Animated.View>
         )}
       />
     </SafeAreaView>

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { RootStackParamList } from '../types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
@@ -10,26 +10,64 @@ const ForgotPasswordScreen: React.FC = () => {
   const [email, setEmail] = useState('');
   const [buttonEnabled, setButtonEnabled] = useState(false);
 
+  // Animated values for the container
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Opacity animation
+  const translateYAnim = useRef(new Animated.Value(20)).current; // Slide-up animation
+
   type VerifyScreenNavigationProp = StackNavigationProp<RootStackParamList, 'VerifyScreen'>;
   const navigation = useNavigation<VerifyScreenNavigationProp>();
-  
+
   useEffect(() => {
     setButtonEnabled(isValidEmail(email));
   }, [email]);
 
+  useEffect(() => {
+    // Animate the container when the screen loads
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.timing(translateYAnim, {
+        toValue: 0,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [fadeAnim, translateYAnim]);
+
   const handleRecoverPassword = () => {
-    navigation.navigate('VerifyScreen'); 
+    navigation.navigate('VerifyScreen');
   };
+
   return (
-    <View style={styles.container}>
+    <Animated.View
+      style={[
+        styles.container,
+        { opacity: fadeAnim, transform: [{ translateY: translateYAnim }] }, // Apply animation
+      ]}
+    >
       <Text style={styles.title}>Forgot Password?</Text>
       <Text style={styles.subtitle}>Please enter your email to recover your password.</Text>
       <Text style={styles.label}>Email</Text>
-      <Input placeholder="Enter your email" value={email} onChangeText={setEmail} keyboardType="email-address" />
-      <TouchableOpacity style={[styles.button, {backgroundColor: buttonEnabled ? '#3E77BC' : '#A0B9D9'}]} onPress={handleRecoverPassword} disabled={!buttonEnabled} >
+      <Input
+        placeholder="Enter your email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+      />
+      <TouchableOpacity
+        style={[
+          styles.button,
+          { backgroundColor: buttonEnabled ? '#3E77BC' : '#A0B9D9' },
+        ]}
+        onPress={handleRecoverPassword}
+        disabled={!buttonEnabled}
+      >
         <Text style={styles.buttonText}>Recover Password</Text>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -49,7 +87,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 14,
-    color: '#000', 
+    color: '#000',
     textAlign: 'center',
     marginBottom: 30,
   },
@@ -57,14 +95,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000',
     marginBottom: 8,
-  },
-  input: {
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 15,
-    marginBottom: 20,
   },
   button: {
     position: 'absolute',

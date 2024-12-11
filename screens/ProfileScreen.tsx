@@ -1,11 +1,19 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { RootStackParamList } from '../types/navigationTypes';
 import Icon from '../utils/Icons';
 import { useAuth } from '../context/AuthContext';
 import { globalStyles } from '../styles/globalStyles';
+import { launchImageLibrary as _launchImageLibrary, launchCamera as _launchCamera, ImageLibraryOptions, MediaType } from 'react-native-image-picker';
+let launchImageLibrary = _launchImageLibrary;
+let launchCamera = _launchCamera;
+interface ProfileImage {
+  uri: string;
+}
+import { Alert } from 'react-native';
+
 
 const ProfileScreen: React.FC = () => {
     type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Profile'>;
@@ -20,6 +28,65 @@ const ProfileScreen: React.FC = () => {
   const logout = () => {
     setIsAuthed(false)
   }
+  const [profileImage, setProfileImage] = useState<ProfileImage | null>(null);
+
+  const openImagePicker = () => {
+    const options : ImageLibraryOptions = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+
+    launchImageLibrary(options, handleResponse);
+  };
+
+  const handleCameraLaunch = () => {
+    const options : ImageLibraryOptions = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+
+    launchCamera(options, handleResponse);
+  };
+
+  const handleResponse = (response: any) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('Image picker error: ', response.error);
+    } else {
+      let imageUri = response.uri || response.assets?.[0]?.uri;
+      console.log('Image URI:', imageUri); // Add this to see the URI
+      setProfileImage(imageUri);
+    }
+  };
+  const openImagePickerOptions = () => {
+    Alert.alert(
+      'Choose an Option',
+      'Select how you want to pick the image',
+      [
+        {
+          text: 'Camera',
+          onPress: handleCameraLaunch, // Opens the camera
+        },
+        {
+          text: 'Gallery',
+          onPress: openImagePicker, // Opens the gallery
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+  
+  
+
   
   return (
     <SafeAreaView style={styles.safeAreaContainer} >
@@ -30,11 +97,12 @@ const ProfileScreen: React.FC = () => {
 
       <View style={styles.profileContainer}>
       <View style={styles.imageWrapper}>
-        <Image
-          style={styles.profileImage}
-          source={require('../assets/profile.png')}
+              <Image
+        style={styles.profileImage}
+        source={profileImage ? { uri: profileImage } : require('../assets/profile.png')}
         />
-        <TouchableOpacity style={styles.editIcon} onPress={() => console.log('Edit profile image')}>
+
+        <TouchableOpacity style={styles.editIcon} onPress={openImagePickerOptions}>
           <Icon name={'Camera'} size={24} color={ '#282534' } />
         </TouchableOpacity>
       </View>

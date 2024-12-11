@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Animated, Easing, FlatList, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
@@ -65,9 +65,52 @@ useEffect(() => {
       </Text>
     </TouchableOpacity>
   );
+  const containerAnim = useRef(new Animated.Value(0)).current;
+  const saveButtonAnim = useRef(new Animated.Value(1)).current;
+  const createPulseSequence = (pulses: number) => {
+    const animations = [];
+    for (let i = 0; i < pulses; i++) {
+      animations.push(
+        Animated.timing(saveButtonAnim, {
+          toValue: 1.1,
+          duration: 1000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(saveButtonAnim, {
+          toValue: 1,
+          duration: 1000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        })
+      );
+    }
+    return animations;
+  };
+  
+  useEffect(() => {
+    // Animate container fade-in
+    Animated.timing(containerAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+    Animated.sequence(createPulseSequence(1)).start();
+
+    
+  }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <Animated.View
+    style={[
+      styles.container,
+      {
+        opacity: containerAnim,
+        transform: [{ translateY: containerAnim.interpolate({ inputRange: [0, 1], outputRange: [50, 0] }) }],
+      },
+    ]}
+  >
+
           <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.container}>
@@ -77,10 +120,10 @@ useEffect(() => {
 <View >
 
 <Text style={styles.sectionTitle}>Mode of Payment</Text>
-<TouchableWithoutFeedback 
+{/* <TouchableWithoutFeedback 
                   onPress={Keyboard.dismiss}
                   accessible={false} // Ensures the accessibility focus isn't blocked
-                  >
+                  > */}
   <View style={styles.inputContainer} >
     <Text style={styles.label}>Enter amount</Text>
     <View style={styles.AmountinputContainer}>
@@ -105,7 +148,7 @@ useEffect(() => {
       <Text style={styles.input}>Document</Text>
     </View>
     </View>
-    </TouchableWithoutFeedback>
+    {/* </TouchableWithoutFeedback> */}
 
 
 {/* <DocsAndAmountFom /> */}
@@ -116,9 +159,20 @@ setSelectedYear={setSelectedYear}
 date={date}
 setDate={setDate}
 />     
-  <TouchableOpacity style={styles.saveButton} onPress={handleGoToForm}>
-    <Text style={styles.saveButtonText}>Save</Text>
-  </TouchableOpacity> 
+<TouchableOpacity onPress={handleGoToForm}>
+
+  <Animated.View
+          style={[
+            styles.saveButton,
+            {
+              transform: [{ scale: saveButtonAnim }],
+            },
+          ]}
+        >
+            <Text style={styles.saveButtonText}>Save</Text>
+        </Animated.View>
+        </TouchableOpacity>
+
 </View>
 
     {/* <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}> */}
@@ -127,7 +181,7 @@ setDate={setDate}
 
 
 
-     </SafeAreaView>
+</Animated.View>
   );
 };
 

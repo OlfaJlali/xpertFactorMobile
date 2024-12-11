@@ -15,7 +15,9 @@ const NotificationsScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
-        <Header goBack={() => navigation.pop()} title='Notifications' />
+      <View style={{paddingTop: 20}}>
+      <Header goBack={() => navigation.pop()} title='Notifications' />
+      </View>
 
 
     <View style={styles.container}>

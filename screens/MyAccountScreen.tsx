@@ -39,7 +39,9 @@ const MyAccountScreen = () => {
 
   return (
      <SafeAreaView style={styles.safeAreaContainer} >
+      <View style={{paddingTop: 20}}>
       <Header goBack={() => navigation.pop()} title='My Account' />
+      </View>
     <View style={styles.container}>
       {/* Header */}
   

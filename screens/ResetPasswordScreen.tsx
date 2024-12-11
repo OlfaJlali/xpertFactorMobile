@@ -32,7 +32,9 @@ const ResetPasswordScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
-            <Header goBack={() => navigation.pop()} title='Reset Password' />
+      <View style={{paddingTop: 20}}>
+      <Header goBack={() => navigation.pop()} title='Reset Password' />
+      </View>      
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
