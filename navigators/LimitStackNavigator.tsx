@@ -12,6 +12,7 @@ import RequestLimit from "../screens/RequestLimit";
 import { useTab } from "../context/TabContext";
 import { useShow } from "../context/ShowContext";
 import { useRendering } from "../context/RenderingContext";
+import LimitBuyerScreen from "../screens/LimitBuyerScreen";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -39,12 +40,9 @@ export const LimitStackNavigator = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name="LimitBuyer"
-        component={() => <BuyerLitige handlePress={handlePress}  pageTitle="Limit"/>}
+        component={LimitBuyerScreen}
       />
-      <Stack.Screen name="LimitForm" component={() => 
-        <RequestLimit />
-        
-        } />
+      <Stack.Screen name="LimitForm" component={RequestLimit} />
 
       <Stack.Screen name="Congratulations">
         {() => <CongratulationsScreen onPress={goToDashboard} text="your request is successfully sent" />}

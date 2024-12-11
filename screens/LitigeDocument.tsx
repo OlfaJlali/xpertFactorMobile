@@ -9,9 +9,11 @@ import { useSearch } from '../hooks/useSearch';
 import { documentsDataTypes } from '../types/documentsDataTypes';
 import { documentsData } from '../data/Documents';
 import { useNavigation } from '@react-navigation/native';
+import Header from '../components/Header';
 
-const LitigeDocument = ({ route }: any) => {
-  const { firstname, lastname, id, picture } = route.params;
+const LitigeDocument = ({ route  }: any ) => {
+  console.log(route.params)
+  const { firstname, lastname, id, picture ,title } = route.params;
   const buyerData: BuyerDatatype = { firstname, lastname, id, picture };
 
   // Correctly typed navigation prop
@@ -30,18 +32,26 @@ const LitigeDocument = ({ route }: any) => {
     };
 
     // Correct navigation with params
-    navigation.navigate('LitigeDate', { LitigeDate });
+    if(title === "Litige") {
+      navigation.navigate('LitigeDate', { LitigeDate });
+
+    }else {
+      navigation.navigate('ProrogationDate', { ProrogationDate : LitigeDate });
+
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={globalStyles.PageTitle}>Litige</Text>
+    <Header padding={false} goBack={() => navigation.pop()} title={title} />
       <SearchList
       text='please select a document'
+      
         data={filteredData}
         searchQuery={searchQuery}
         onSearch={handleSearch}
         renderItem={({ item }) => (
+          
           <TouchableOpacity onPress={() => handlePress(item)} style={styles.itemContainer}>
             <View style={styles.itemContent}>
               <Image

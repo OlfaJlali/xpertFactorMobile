@@ -9,6 +9,7 @@ import { Input } from '../components/TextInput';
 import DatePicker from 'react-native-date-picker';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button } from '../components/Button';
+import Header from '../components/Header';
 type RequestLimitScreenNavigationProp = StackNavigationProp<RootStackParamList, 'LimitForm'>;
 
 const RequestLimit = () => {
@@ -38,8 +39,9 @@ const RequestLimit = () => {
         <ScrollView 
         showsVerticalScrollIndicator={false}
         >
+             <Header goBack={() => navigation.pop()} title='Limit' />
  <View style={{paddingHorizontal: 20}}>
- <Text style={globalStyles.PageTitle}>Limit</Text>
+
         <View >
                 <Text style={globalStyles.inputTitle}>Request Date</Text>
                 <TouchableOpacity onPress={() => setIsOpenRequestDate(!isOpenRequestDate)}>

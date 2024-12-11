@@ -1,6 +1,9 @@
 import { BuyerDatatype } from "./buyersDataTypes";
 import { documentsDataTypes } from "./documentsDataTypes";
-
+export type Document = {
+    BuyerData : BuyerDatatype,
+    title : string
+}
 export type RootStackParamList = {
     Onboarding: undefined;
     SignIn: undefined;
@@ -29,9 +32,13 @@ export type RootStackParamList = {
         documentCount: number;
     };    
     Litige : undefined
-    LitigeDocument: BuyerDatatype;
+    LitigeDocument: Document;
     LitigeDate: { LitigeDate: { buyerData: BuyerDatatype; document: documentsDataTypes } };
-    LimitBuyer: undefined;
-    LimitForm: BuyerDatatype
+    LimitBuyer: { pageTitle: string , handlePress: (buyer: BuyerDatatype) => void  };
+    LimitForm: BuyerDatatype;
+    Prorogation : undefined
+    ProrogationDocument: Document;
+    ProrogationDate: { ProrogationDate: { buyerData: BuyerDatatype; document: documentsDataTypes } };
+    Buyer: undefined;
   };
   

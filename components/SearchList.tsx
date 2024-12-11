@@ -8,8 +8,9 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-import { globalStyles } from '../styles/globalStyles';
+import { COLOR_MAIN, globalStyles } from '../styles/globalStyles';
 import SearchInput from './SearchInput';
+import Icon from '../utils/Icons';
 
 interface SearchListProps<T> {
   data: T[];
@@ -17,6 +18,7 @@ interface SearchListProps<T> {
   onSearch: (query: string) => void;
   text: string
   renderItem: ({ item }: { item: T }) => JSX.Element;
+  addIcon? : boolean
 }
 
 export const SearchList = <T,>({
@@ -24,11 +26,20 @@ export const SearchList = <T,>({
   searchQuery,
   onSearch,
   renderItem,
-  text
+  text,
+  addIcon = false
 }: SearchListProps<T>) => (
   <View style={styles.container}>
+         
+        {addIcon ? ( <View style={{    flexDirection: 'row',
+          justifyContent: 'space-between',
+      }}>
           <Text style={globalStyles.inputTitle}>{text}</Text>
-
+          <TouchableOpacity onPress={() => console.log('Plus button pressed')}>
+              <Icon name='CirclePlus' size={24} color={COLOR_MAIN} />
+              </TouchableOpacity>
+      </View>)  :  <Text style={globalStyles.inputTitle}>{text}</Text>
+        }
     <SearchInput 
     searchQuery={searchQuery}
     onSearch={onSearch}

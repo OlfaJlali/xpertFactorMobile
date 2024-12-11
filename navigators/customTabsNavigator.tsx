@@ -13,6 +13,8 @@ import { RequestFinancementStackNavigator } from './RequestFinancementStackNavig
 import { LitigeStackNavigator } from './LitigeStackNavigator';
 import { LimitStackNavigator } from './LimitStackNavigator';
 import { TabItem } from '../types/BottomSheetTypes';
+import { ProrogationStackNavigator } from './ProrogationStackNavigator';
+import { BuyerStackNavigator } from './BuyerStackNavigator';
 
 const CustomTabsNavigator: React.FC = () => {
   const { selectedIndex, setSelectedIndex } = useTab();
@@ -30,8 +32,8 @@ const CustomTabsNavigator: React.FC = () => {
   const AdditionalScreens: TabItem[] = [
     { icon: 'ListRestart', label: 'Litige', component: LitigeStackNavigator },
     { icon: 'CalendarClock', label: 'Limit', component: LimitStackNavigator },
-    { icon: 'UserPlus', label: 'Add buyer', component: LimitStackNavigator },
-    { icon: 'FileClock', label: 'Prorogation', component: LimitStackNavigator },
+    { icon: 'UserPlus', label: 'Add buyer', component: BuyerStackNavigator },
+    { icon: 'FileClock', label: 'Prorogation', component: ProrogationStackNavigator },
 
 
   ];

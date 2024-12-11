@@ -7,11 +7,12 @@ import { globalStyles } from '../styles/globalStyles';
 type HeaderProps = {
     goBack: () => void ;
     title : string
+    padding?: boolean
 }
-const Header: React.FC<HeaderProps> = ({goBack , title}) => {
+const Header: React.FC<HeaderProps> = ({goBack , title , padding = true}) => {
   return (
     <TouchableOpacity onPress={goBack}>
-    <View  style={{flexDirection : 'row' ,paddingLeft: 10 ,gap : 5}}>
+    <View  style={{flexDirection : 'row' , paddingLeft:  padding ? 10 : 0 ,gap : 5}}>
     <Icon name={'ChevronLeft'} size={32} color={ '#3E77BC' } />
     <Text style={globalStyles.ProfilePageTitle}>{title}</Text>
 

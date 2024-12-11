@@ -8,17 +8,19 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Header from '../components/Header';
-type LitigeDateNavigationProp = StackNavigationProp<RootStackParamList, 'LitigeDate'>;
+import { Input } from '../components/TextInput';
+type ProrogationDateNavigationProp = StackNavigationProp<RootStackParamList, 'ProrogationDate'>;
 
-const LitigeDate = ({ route }: any) => {
+const ProrogationDate = ({ route }: any) => {
     console.log(route.params)
     const[selectedType, setSelectedType] = useState('Achat')
     const [isOpenDate, setIsOpenDate] = useState(false);
     const [isOpenEchanceDate, setIsOpenEchanceDate] = useState(false);
     const [echanceDate, setEchanceDate] = useState(new Date());
+    const [motif , setMotif] = useState('')
 
-    const [litigeDate, setLitigeDate] = useState(new Date());
-        const navigation = useNavigation<LitigeDateNavigationProp>();   
+    const [ProrogationDate, setProrogationDate] = useState(new Date());
+        const navigation = useNavigation<ProrogationDateNavigationProp>();   
 
     const goToCongrats = () => {    
         navigation.navigate('Congratulations'); // Navigate to the Bordoreaux screen
@@ -30,12 +32,12 @@ const LitigeDate = ({ route }: any) => {
         paddingTop: 20
         
     }}>
-                     <Header goBack={() => navigation.pop()} title='Litige' />
+                     <Header goBack={() => navigation.pop()} title='Prorogation' />
 
 
        <View style={{paddingHorizontal: 20}}>
        <View>
-                <Text style={[globalStyles.inputTitle]}>Litige Type</Text>
+                <Text style={[globalStyles.inputTitle]}>Prorogation Type</Text>
                     <ScrollView
                     horizontal
                     showsHorizontalScrollIndicator={false}
@@ -69,25 +71,31 @@ const LitigeDate = ({ route }: any) => {
                     
 
         </View>
-        <View >
-                <Text style={globalStyles.inputTitle}>Litige Date</Text>
-                <TouchableOpacity onPress={() => setIsOpenDate(!isOpenDate)}>
-                    <Text style={globalStyles.dateInput}>{`${litigeDate.getDate()}/${litigeDate.getMonth() + 1}/${litigeDate.getFullYear()}`}</Text>
+        <View>
+        <Text style={[globalStyles.inputTitle, {paddingTop: 10}]}>Due date</Text>
+
+        <TouchableOpacity onPress={() => setIsOpenDate(!isOpenDate)}>
+                    <Text style={globalStyles.dateInput}>{`${ProrogationDate.getDate()}/${ProrogationDate.getMonth() + 1}/${ProrogationDate.getFullYear()}`}</Text>
                     <DatePicker
                     modal
                     open={isOpenDate}
-                    date={litigeDate}
+                    date={ProrogationDate}
                     mode="date"
                     onConfirm={(date: Date) => {
-                    setLitigeDate(date);
+                    setProrogationDate(date);
                     setIsOpenDate(false);
                     }}
                     onCancel={() => setIsOpenDate(false)}
                     />
                 </TouchableOpacity>
+        </View>
+        <View >
+                <Text style={[globalStyles.inputTitle, {paddingTop: 10}]}>Prorogation Motif</Text>
+                <Input  placeholder="Prorogation Motif" value={motif} onChangeText={setMotif} keyboardType='default' />
+               
             </View>
             <View >
-                <Text style={globalStyles.inputTitle}>Litige Echance Date</Text>
+                <Text style={[globalStyles.inputTitle, {paddingTop: 20}]}>Prorogation Echance Date</Text>
                 <TouchableOpacity onPress={() => setIsOpenEchanceDate(!isOpenEchanceDate)}>
                     <Text style={globalStyles.dateInput}>{`${echanceDate.getDate()}/${echanceDate.getMonth() + 1}/${echanceDate.getFullYear()}`}</Text>
                     <DatePicker
@@ -118,4 +126,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LitigeDate;
+export default ProrogationDate;

@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, SafeAreaView, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
 import { useBordereauxForm } from '../hooks/useBordereauxForm';
-import { TextInput } from 'react-native-gesture-handler';
+import { TextInput, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import TransactionList from '../components/DocumentsNumber';
 import InterestPayment from '../components/InterestPayment';
@@ -68,55 +68,64 @@ useEffect(() => {
 
   return (
     <SafeAreaView style={styles.container}>
+          <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={styles.container}>
+                  <Text style={globalStyles.PageTitle}>Bordereau</Text>
+
+
+<View >
+
+<Text style={styles.sectionTitle}>Mode of Payment</Text>
+<TouchableWithoutFeedback 
+                  onPress={Keyboard.dismiss}
+                  accessible={false} // Ensures the accessibility focus isn't blocked
+                  >
+  <View style={styles.inputContainer} >
+    <Text style={styles.label}>Enter amount</Text>
+    <View style={styles.AmountinputContainer}>
+      <TextInput
+        style={styles.input}
+        value={totalAmount}
+        onChangeText={setTotalAmount}
+        keyboardType="numeric"
+        
+      />
+      <Text style={styles.input}>TND</Text>
+
+    </View>
+    <Text style={styles.label}>Enter documents number</Text>
+    <View style={styles.AmountinputContainer}>
+      <TextInput
+        style={styles.input}
+        value={documentCount}
+        onChangeText={setDocumentCount}
+        keyboardType="numeric"
+      />
+      <Text style={styles.input}>Document</Text>
+    </View>
+    </View>
+    </TouchableWithoutFeedback>
+
+
+{/* <DocsAndAmountFom /> */}
+<Text style={styles.sectionTitle}>Year and date</Text>
+<InterestPayment     
+selectedYear={selectedYear}
+setSelectedYear={setSelectedYear}
+date={date}
+setDate={setDate}
+/>     
+  <TouchableOpacity style={styles.saveButton} onPress={handleGoToForm}>
+    <Text style={styles.saveButtonText}>Save</Text>
+  </TouchableOpacity> 
+</View>
 
     {/* <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}> */}
-    <Text style={globalStyles.PageTitle}>Bordereau</Text>
+  
+</KeyboardAvoidingView>
 
 
-    <View style={styles.container}>
-
-    <Text style={styles.sectionTitle}>Mode of Payment</Text>
-      <View style={styles.inputContainer} >
-        <Text style={styles.label}>Enter amount</Text>
-        <View style={styles.AmountinputContainer}>
-          <TextInput
-            style={styles.input}
-            value={totalAmount}
-            onChangeText={setTotalAmount}
-            keyboardType="numeric"
-            
-          />
-          <Text style={styles.input}>TND</Text>
-
-        </View>
-        <Text style={styles.label}>Enter documents number</Text>
-        <View style={styles.AmountinputContainer}>
-          <TextInput
-            style={styles.input}
-            value={documentCount}
-            onChangeText={setDocumentCount}
-            keyboardType="numeric"
-            
-          />
-          <Text style={styles.input}>Document</Text>
-
-        </View>
-        </View>
-
-    {/* <DocsAndAmountFom /> */}
-    <Text style={styles.sectionTitle}>Year and date</Text>
-
-  <InterestPayment     
-    selectedYear={selectedYear}
-    setSelectedYear={setSelectedYear}
-    date={date}
-    setDate={setDate}
- />
-     
-      <TouchableOpacity style={styles.saveButton} onPress={handleGoToForm}>
-        <Text style={styles.saveButtonText}>Save</Text>
-      </TouchableOpacity> 
-    </View>
 
      </SafeAreaView>
   );

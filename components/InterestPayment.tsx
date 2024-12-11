@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
   cardsContainer: {
     flexDirection: 'row',
-    gap: 20
+    justifyContent: 'space-between',
   },
   card: {
     width: width / 2.5,
