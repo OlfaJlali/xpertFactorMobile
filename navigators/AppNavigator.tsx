@@ -6,6 +6,9 @@ import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import VerifyScreen from '../screens/VerifyScreen';
 import ChangePasswordScreen from '../screens/ChangePassword';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ActivityIndicator, Text, View } from 'react-native';
+import { COLOR_MAIN } from '../styles/globalStyles';
+import LoadingView from '../components/LoadingView';
 
 const Stack = createStackNavigator();
 
@@ -32,7 +35,9 @@ const AppNavigator: React.FC = () => {
 
   if (showOnboarding === null) {
     // Optional: Add a loading screen or return null to avoid rendering
-    return null;
+    return (
+      <LoadingView />
+    );
   }
 
   return (

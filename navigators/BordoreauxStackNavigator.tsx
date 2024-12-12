@@ -9,8 +9,9 @@ import { useShow } from "../context/ShowContext";
 import { useRendering } from "../context/RenderingContext";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ActivityIndicator, Text } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { COLOR_MAIN } from "../styles/globalStyles";
+import LoadingView from "../components/LoadingView";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -52,9 +53,11 @@ export const BordereauxStackNavigator = () => {
       checkFirstInstall();
     }, []);
   
-    if (showOnboarding === null) {
-       return <ActivityIndicator color={COLOR_MAIN} />
-    }
+      if (showOnboarding === null) {
+        return (
+        <LoadingView />
+        );
+      }  
   
 
   return (
