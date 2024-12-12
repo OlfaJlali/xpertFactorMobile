@@ -66,7 +66,12 @@ const CustomTabsNavigator: React.FC = () => {
     <View style={{ flex: 1 }}>
       {renderingCurrent ? <CurrentScreen /> : <AdditionalScreensRenderer />}
       {show && (
-        <Animated.View style={{ transform: [{ translateY: slideAnim }] }}>
+        <Animated.View style={{   
+          position: 'absolute',      
+          bottom: 0,
+          left: 0,
+          right: 0,
+   transform: [{ translateY: slideAnim }] }}>
           <TabsNavigator
             data={screens}
             selectedIndex={selectedIndex}

@@ -1,6 +1,6 @@
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import React, { useRef, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, Dimensions } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, Dimensions, Animated } from 'react-native';
 import { RootStackParamList } from '../types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Progress from '../components/CompletedDocs';
@@ -19,6 +19,7 @@ interface DocumentImages {
   uri: string;
 }
 import { Alert } from 'react-native';
+import { useShow } from '../context/ShowContext';
 
 type BordoreauxFormRouteProp = RouteProp<RootStackParamList, 'BordoreauxForm'>;
 const { width } = Dimensions.get('window');
@@ -189,10 +190,18 @@ const [selectedScanType, setSelectedScanType] = useState('')
 
     }
   };
+  const {  setShow } = useShow();  
+
 
   return (
    <SafeAreaView style={styles.safeAreaContainer}>
-    <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
+    <ScrollView ref={scrollViewRef} 
+     onScroll={() => setShow(false)}
+     onMomentumScrollEnd={() => setShow(true)}
+     scrollEventThrottle={16}
+
+    showsVerticalScrollIndicator={false} 
+    contentContainerStyle={styles.scrollViewContent}>
     {/* <View style={{paddingTop: 20}}>
       </View> */}
       <Header goBack={() => navigation.pop()} title='Bordereau' />
@@ -211,7 +220,7 @@ const [selectedScanType, setSelectedScanType] = useState('')
     marginBottom:20}}>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Type of document</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} >
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}   >
           <View style={DashboardScreenStyles.tabContainer}>
             <TouchableOpacity
               style={[DashboardScreenStyles.tab, documentType === 'Facture' && DashboardScreenStyles.activeTab]}
@@ -350,6 +359,7 @@ const styles = StyleSheet.create({
   safeAreaContainer: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingTop: 20
   },
 
   section: {

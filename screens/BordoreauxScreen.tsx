@@ -1,17 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated, Easing, FlatList, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
 import { useBordereauxForm } from '../hooks/useBordereauxForm';
 import { TextInput, TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import LinearGradient from 'react-native-linear-gradient';
-import TransactionList from '../components/DocumentsNumber';
 import InterestPayment from '../components/InterestPayment';
-import Counter from './counter';
-import DocsAndAmountFom from '../components/DocsAndAmountFom';
 import { globalStyles } from '../styles/globalStyles';
-import Header from '../components/Header';
 type VerifyScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
 
 const BordereauxScreen: React.FC = () => {
@@ -23,8 +18,6 @@ const BordereauxScreen: React.FC = () => {
     setSelectedYear,
     documentCount,
     setDocumentCount,
-    // incrementCount,
-    // decrementCount,
     date,
     isDatePickerOpen,
     closeDatePicker,
@@ -32,7 +25,6 @@ const BordereauxScreen: React.FC = () => {
     flatListRef,
     years,
   } = useBordereauxForm();
-
 useEffect(() => {
   const selectedYearIndex = years.findIndex((year) => year === selectedYear);
   if (flatListRef.current) {
@@ -58,64 +50,26 @@ useEffect(() => {
       documentCount : docsCount ,  
     });
   };
-  const renderYear = ({ item }: { item: number }) => (
-    <TouchableOpacity onPress={() => setSelectedYear(item)}>
-      <Text style={[styles.yearText, item === selectedYear && styles.selectedYear]}>
-        {item}
-      </Text>
-    </TouchableOpacity>
-  );
-  const containerAnim = useRef(new Animated.Value(0)).current;
-  const saveButtonAnim = useRef(new Animated.Value(1)).current;
-  const createPulseSequence = (pulses: number) => {
-    const animations = [];
-    for (let i = 0; i < pulses; i++) {
-      animations.push(
-        Animated.timing(saveButtonAnim, {
-          toValue: 1.1,
-          duration: 1000,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        }),
-        Animated.timing(saveButtonAnim, {
-          toValue: 1,
-          duration: 1000,
-          easing: Easing.inOut(Easing.ease),
-          useNativeDriver: true,
-        })
-      );
-    }
-    return animations;
-  };
-  
-  // useEffect(() => {
-  //   // Animate container fade-in
-  //   Animated.timing(containerAnim, {
-  //     toValue: 1,
-  //     duration: 500,
-  //     useNativeDriver: true,
-  //   }).start();
 
-    
-  // }, []);
+
 
   return (
-    <View style={styles.container}>
+    <View style={Platform.OS === 'ios' ? styles.container : styles.containerAndroid }>
 
           <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.container}>
                  
-                  <Text style={[globalStyles.PageTitle, {paddingTop: 20}]}>Bordereau</Text>
+                  <Text style={[globalStyles.PageTitle, {  paddingTop:  Platform.OS === 'ios' ? 20 : 0}]}>Bordereau</Text>
 
 
 <View >
 
 <Text style={styles.sectionTitle}>Mode of Payment</Text>
-{/* <TouchableWithoutFeedback 
+<TouchableWithoutFeedback 
                   onPress={Keyboard.dismiss}
                   accessible={false} // Ensures the accessibility focus isn't blocked
-                  > */}
+                  >
   <View style={styles.inputContainer} >
     <Text style={styles.label}>Enter amount</Text>
     <View style={styles.AmountinputContainer}>
@@ -140,7 +94,7 @@ useEffect(() => {
       <Text style={styles.input}>Document</Text>
     </View>
     </View>
-    {/* </TouchableWithoutFeedback> */}
+    </TouchableWithoutFeedback>
 
 
 {/* <DocsAndAmountFom /> */}
@@ -158,7 +112,6 @@ setDate={setDate}
       </View>
 </View>
 
-    {/* <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}> */}
   
 </KeyboardAvoidingView>
 
@@ -181,7 +134,13 @@ const styles = StyleSheet.create({
     color: '#000',
     marginBottom: 10,
   },
+  containerAndroid:{
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingHorizontal: 12,
+    paddingVertical: 10,
 
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',

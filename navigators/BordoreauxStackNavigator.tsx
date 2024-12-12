@@ -7,6 +7,10 @@ import BordoreauxStarter from "../screens/BordoreauxStarter";
 import { useTab } from "../context/TabContext";
 import { useShow } from "../context/ShowContext";
 import { useRendering } from "../context/RenderingContext";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ActivityIndicator, Text } from "react-native";
+import { COLOR_MAIN } from "../styles/globalStyles";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -27,14 +31,39 @@ export const BordereauxStackNavigator = () => {
     setSelectedIndex(0); 
     setShow(true);
     };
+    const [showOnboarding, setShowOnboarding] = useState<boolean | null>(null);
+
+    useEffect(() => {
+
+      const checkFirstInstall = async () => {
+        try {
+          const hasLaunched = await AsyncStorage.getItem('alreadySeen');
+          if (hasLaunched === null) {
+            await AsyncStorage.setItem('alreadySeen', 'true');
+            setShowOnboarding(true);
+          } else {
+            setShowOnboarding(false);
+          }
+        } catch (error) {
+          console.error('Failed to check AsyncStorage:', error);
+        }
+      };
+  
+      checkFirstInstall();
+    }, []);
+  
+    if (showOnboarding === null) {
+       return <ActivityIndicator color={COLOR_MAIN} />
+    }
+  
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name='BordoreauxStarter' component={BordoreauxStarter} />
-      <Stack.Screen name='Bordoreaux' component={BordoreauxScreen} />
-      <Stack.Screen name="BordoreauxForm" component={BordoreauxFormScreen} />
+      <Stack.Navigator initialRouteName={showOnboarding ? "BordoreauxStarter" : "Bordoreaux"} >
+        <Stack.Screen name='BordoreauxStarter' component={BordoreauxStarter}  options={{ headerShown: false }}/>
+      <Stack.Screen name='Bordoreaux' component={BordoreauxScreen} options={{ headerShown: false }}/>
+      <Stack.Screen name="BordoreauxForm" component={BordoreauxFormScreen} options={{ headerShown: false }}/>
       {/* <Stack.Screen name="Congratulations" component={CongratulationsScreen} /> */}
-          <Stack.Screen name="Congratulations">
+          <Stack.Screen name="Congratulations" options={{ headerShown: false }}>
       {() => <CongratulationsScreen onPress={goToDashboard} text="your request is successfully sent" />}
     </Stack.Screen>
     </Stack.Navigator>
