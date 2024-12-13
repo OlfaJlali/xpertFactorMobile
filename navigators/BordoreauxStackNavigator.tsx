@@ -38,9 +38,9 @@ export const BordereauxStackNavigator = () => {
 
       const checkFirstInstall = async () => {
         try {
-          const hasLaunched = await AsyncStorage.getItem('alreadySeen');
+          const hasLaunched = await AsyncStorage.getItem('BordoreauxStarter');
           if (hasLaunched === null) {
-            await AsyncStorage.setItem('alreadySeen', 'true');
+            await AsyncStorage.setItem('BordoreauxStarter', 'true');
             setShowOnboarding(true);
           } else {
             setShowOnboarding(false);
@@ -61,7 +61,7 @@ export const BordereauxStackNavigator = () => {
   
 
   return (
-      <Stack.Navigator initialRouteName={showOnboarding ? "BordoreauxStarter" : "Bordoreaux"} >
+      <Stack.Navigator initialRouteName={/*showOnboarding ? "BordoreauxStarter" : "Bordoreaux" */ "BordoreauxStarter"} >
         <Stack.Screen name='BordoreauxStarter' component={BordoreauxStarter}  options={{ headerShown: false }}/>
       <Stack.Screen name='Bordoreaux' component={BordoreauxScreen} options={{ headerShown: false }}/>
       <Stack.Screen name="BordoreauxForm" component={BordoreauxFormScreen} options={{ headerShown: false }}/>

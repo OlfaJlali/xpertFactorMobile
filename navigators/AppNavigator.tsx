@@ -41,7 +41,7 @@ const AppNavigator: React.FC = () => {
   }
 
   return (
-    <Stack.Navigator initialRouteName={showOnboarding ? "Onboarding" : "SignIn"}>
+    <Stack.Navigator initialRouteName={ /* showOnboarding ? "Onboarding" : "SignIn"} */ "onBoarding"}>
       <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
       <Stack.Screen name="SignIn" options={{ headerShown: false }}>
         {(props) => <SignInScreen />} 
