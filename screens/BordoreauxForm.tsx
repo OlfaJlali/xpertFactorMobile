@@ -12,6 +12,8 @@ import Counter from './counter';
 import DocsAndAmountFom from '../components/DocsAndAmountFom';
 import { globalStyles } from '../styles/globalStyles';
 import Header from '../components/Header';
+import DocumentScanner from 'react-native-document-scanner-plugin';
+
 import { launchImageLibrary as _launchImageLibrary, launchCamera as _launchCamera, ImageLibraryOptions, MediaType } from 'react-native-image-picker';
 let launchImageLibrary = _launchImageLibrary;
 let launchCamera = _launchCamera;
@@ -39,9 +41,52 @@ const BordoreauxFormScreen: React.FC<BordereauxFormProps> = ({ route }) => {
   const [dueDate, setDueDate] = useState(new Date());
   const [documentDate, setDocumentDate] = useState(new Date);
   const [amount, setAmount] = useState('');
-const [selectedScanType, setSelectedScanType] = useState('')
+const [selectedScanType, setSelectedScanType] = useState('');
+const [scannedImages , setScannedImages] = useState<string[]>([])
   type VerifyScreenNavigationProp = StackNavigationProp<RootStackParamList, 'BordoreauxForm'>;
   const navigation = useNavigation<VerifyScreenNavigationProp>();
+  const [scannedImage, setScannedImage] = useState<string | undefined>(undefined);
+
+  const scanDocument = async () => {
+    // start the document scanner
+    const { scannedImages, status } = await DocumentScanner.scanDocument({
+      maxNumDocuments: 2
+    });
+    // get back an array with scanned image file paths
+    if (scannedImages && scannedImages.length > 0) {
+        // set the img src, so we can view the first scanned image
+        const total = takingPics + scannedImages.length
+        setTakingPics(total)
+        setScannedImage(scannedImages[0]);
+        if (status === 'success' && scannedImages?.length) {
+          if (validateScannedDocuments(scannedImages)) {
+            navigation.navigate('Congratulations');
+          }
+        } else if (status === 'cancel') {
+          Alert.alert('Scan Cancelled', 'Please complete the scanning process.');
+        }
+
+    }
+   
+  }
+  const validateScannedDocuments = (scannedImages: string[]) => {
+    const totalScanned = takingPics + scannedImages.length;
+    console.log(totalScanned , 'totalScanned' ,documentCount , 'documentCount' )
+    if (totalScanned < documentCount) {
+      Alert.alert(
+        'Incomplete Scanning',
+        `You have scanned ${totalScanned} documents. Please scan ${documentCount - totalScanned} more.`,
+        [{ text: 'Scan More', onPress: scanDocument }]
+      );
+      return false;
+    }
+  
+    setTakingPics(totalScanned);
+    return true;
+  };
+  
+
+
 
   const handleDocumentTypeChange = (type: string) => setDocumentType(type);
   const handlePaymentModeChange = (mode: string) => setPaymentMode(mode);
@@ -186,7 +231,8 @@ const [selectedScanType, setSelectedScanType] = useState('')
     } else {
       const allDocuments = [...documentsData, newDocument]; // Manually append the new document to the previous ones
     console.log('All documents:', allDocuments);
-    openImagePickerOptions()
+    // openImagePickerOptions()
+    scanDocument()
 
     }
   };

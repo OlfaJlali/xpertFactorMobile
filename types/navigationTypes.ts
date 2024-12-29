@@ -5,6 +5,7 @@ export type Document = {
     title : string
 }
 export type RootStackParamList = {
+    PrivacyPolicy: undefined ; 
     Onboarding: undefined;
     SignIn: undefined;
     Dashboard: undefined;
@@ -20,6 +21,7 @@ export type RootStackParamList = {
     Notifications: undefined;
     CurrentScreen: undefined;
     BordoreauxStarter: undefined;
+    FinancementStarter: undefined;
     RequestFinancement: {
         totalAmout: string ,
         date : Date ,
@@ -40,5 +42,6 @@ export type RootStackParamList = {
     ProrogationDocument: Document;
     ProrogationDate: { ProrogationDate: { buyerData: BuyerDatatype; document: documentsDataTypes } };
     Buyer: undefined;
+    ChangeFirstPassword: undefined;
   };
   

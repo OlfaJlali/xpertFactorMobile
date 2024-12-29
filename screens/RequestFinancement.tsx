@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useCallback, useState } from 'react';
+import { View, Text, SafeAreaView, TouchableOpacity, Platform } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
 import { Tab } from '../components/Tab';
 import { listDashboardTabsStyles } from '../styles/listDashboardTabsStyles';
-import { signInScreenStyles } from '../styles/signInScreenStyles';
-import { globalStyles } from '../styles/globalStyles';
+import { COLOR_MAIN, globalStyles } from '../styles/globalStyles';
 import { Input } from '../components/TextInput';
 import DatePicker from 'react-native-date-picker';
-import { inputStyles } from '../styles/inputStyles';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button } from '../components/Button';
+import Icon from '../utils/Icons';
+import { useShow } from '../context/ShowContext';
 type RequestFinancementScreenNavigationProp = StackNavigationProp<RootStackParamList, 'RequestFinancement'>;
 
 const RequestFinancement = () => {
@@ -27,7 +27,13 @@ const RequestFinancement = () => {
     const goToCongrats = () => {    
         navigation.navigate('Congratulations'); // Navigate to the Bordoreaux screen
       };
-    
+    const {setShow} = useShow()
+    useFocusEffect(
+        useCallback(() => {
+          setShow(true);
+        }, [setShow])
+      );
+      
   return (
     <SafeAreaView style={{    flex: 1,
         backgroundColor: '#fff',
@@ -36,7 +42,26 @@ const RequestFinancement = () => {
         
     }}>
         <View style={{paddingHorizontal: 20}}>
-        <Text style={[globalStyles.PageTitle]}>Financement</Text>
+        <View
+  style={{
+    paddingBottom: 30,
+    paddingLeft: 10,
+    // paddingTop: Platform.OS === 'ios' ? 20 : 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between', // Distributes items to the edges
+    alignItems: 'center',           // Vertically centers items
+  }}
+>
+  
+  <Text style={globalStyles.PageTitle}>Financement</Text>
+  <TouchableOpacity
+  onPress={() => {
+    
+    navigation.navigate('BordoreauxStarter')}}
+  >
+  <Icon name='Info' color={COLOR_MAIN} size={24}   />
+  </TouchableOpacity>
+</View>
 
         <Text style={globalStyles.inputTitle}>Financement type</Text>
 

@@ -1,12 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated, Easing, FlatList, SafeAreaView, ScrollView, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
 import { useBordereauxForm } from '../hooks/useBordereauxForm';
 import { TextInput, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import InterestPayment from '../components/InterestPayment';
-import { globalStyles } from '../styles/globalStyles';
+import { COLOR_MAIN, globalStyles } from '../styles/globalStyles';
+import Icon from '../utils/Icons';
+import { useShow } from '../context/ShowContext';
+import { useTabState } from '../hooks/useTabState';
+import { useTab } from '../context/TabContext';
 type VerifyScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
 
 const BordereauxScreen: React.FC = () => {
@@ -25,6 +29,8 @@ const BordereauxScreen: React.FC = () => {
     flatListRef,
     years,
   } = useBordereauxForm();
+  const {setShow} = useShow()
+  const {} = useTabState
 useEffect(() => {
   const selectedYearIndex = years.findIndex((year) => year === selectedYear);
   if (flatListRef.current) {
@@ -35,6 +41,13 @@ useEffect(() => {
     });
   }
 }, [selectedYear]);
+
+useFocusEffect(
+  useCallback(() => {
+    setShow(true);
+  }, [setShow])
+);
+
 
   const handleGoToForm = () => {
     console.log('totalAmount:', totalAmount )
@@ -57,10 +70,29 @@ useEffect(() => {
     <View style={Platform.OS === 'ios' ? styles.container : styles.containerAndroid }>
 
           <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height' }
                 style={styles.container}>
-                 
-                  <Text style={[globalStyles.PageTitle, {  paddingTop:  Platform.OS === 'ios' ? 20 : 0}]}>Bordereau</Text>
+                <View
+  style={{
+    paddingBottom: 30,
+    paddingLeft: 10,
+    paddingTop: Platform.OS === 'ios' ? 20 : 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between', // Distributes items to the edges
+    alignItems: 'center',           // Vertically centers items
+  }}
+>
+  
+  <Text style={globalStyles.PageTitle}>Bordereau</Text>
+  <TouchableOpacity
+  onPress={() => {
+    
+    navigation.navigate('BordoreauxStarter')}}
+  >
+  <Icon name='Info' color={COLOR_MAIN} size={24}   />
+  </TouchableOpacity>
+</View>
+
 
 
 <View >
@@ -99,6 +131,7 @@ useEffect(() => {
 
 {/* <DocsAndAmountFom /> */}
 <Text style={styles.sectionTitle}>Year and date</Text>
+
 <InterestPayment     
 selectedYear={selectedYear}
 setSelectedYear={setSelectedYear}

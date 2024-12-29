@@ -4,19 +4,19 @@ export const slides: SlideType[] = [
   {
     id: '1',
     image: require('../assets/men1.png'),
-    title: 'Best Digital Solution',
-    subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    title: 'Streamline Your Finances',
+    subtitle: 'Manage your cash flow efficiently with real-time insights.',
   },
   {
     id: '2',
     image: require('../assets/men2.png'),
-    title: 'Achieve Your Goals',
-    subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    title: 'Achieve Financial Clarity',
+    subtitle: 'Access detailed dashboards and stay informed effortlessly.',
   },
   {
     id: '3',
     image: require('../assets/men3.png'),
-    title: 'Increase Your Value',
-    subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    title: 'Empower Your Business',
+    subtitle: 'Optimize operations with tailored solutions for your needs.',
   },
 ];

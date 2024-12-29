@@ -16,6 +16,7 @@ import { TabItem } from '../types/BottomSheetTypes';
 import { ProrogationStackNavigator } from './ProrogationStackNavigator';
 import { BuyerStackNavigator } from './BuyerStackNavigator';
 import StatisticsScreen from '../screens/StatisticsScreen';
+import Intercom, { Visibility } from '@intercom/intercom-react-native';
 
 const CustomTabsNavigator: React.FC = () => {
   const { selectedIndex, setSelectedIndex } = useTab();
@@ -32,10 +33,10 @@ const CustomTabsNavigator: React.FC = () => {
   ];
   const AdditionalScreens: TabItem[] = [
     { icon: 'ListRestart', label: 'Litige', component: LitigeStackNavigator },
-    { icon: 'CalendarClock', label: 'Limit', component: LimitStackNavigator },
+    { icon: 'FileClock', label: 'Limit', component: LimitStackNavigator },
     { icon: 'UserPlus', label: 'Add buyer', component: BuyerStackNavigator },
-    { icon: 'FileClock', label: 'Prorogation', component: ProrogationStackNavigator },
-    { icon: 'ChartPie', label: 'Prorogation', component: StatisticsScreen },
+    { icon: 'CalendarClock', label: 'Prorogation', component: ProrogationStackNavigator },
+    { icon: 'ChartPie', label: 'Stats', component: StatisticsScreen },
 
 
 
@@ -54,6 +55,7 @@ const CustomTabsNavigator: React.FC = () => {
         useNativeDriver: true,
       }).start();
     } else {
+
       Animated.timing(slideAnim, {
         toValue: 100,
         duration: 300,
@@ -61,6 +63,23 @@ const CustomTabsNavigator: React.FC = () => {
       }).start();
     }
   }, [show]);
+  useEffect(() => {
+    if(selectedIndex == 0){
+      Intercom.loginUnidentifiedUser();
+      Intercom.setLauncherVisibility(Visibility.VISIBLE);
+      if(show){
+        Intercom.setBottomPadding(80)
+      }else {
+        Intercom.setBottomPadding(200)
+
+      }
+
+
+    } else {
+      Intercom.setLauncherVisibility(Visibility.GONE);
+
+    }
+  }, [selectedIndex , show]);
 
   return (
     <View style={{ flex: 1 }}>

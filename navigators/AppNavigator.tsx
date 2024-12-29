@@ -9,6 +9,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { COLOR_MAIN } from '../styles/globalStyles';
 import LoadingView from '../components/LoadingView';
+import ChangeFirstPassword from '../screens/ChangeFirstPassword';
+import { DIContainer } from '../di/container';
 
 const Stack = createStackNavigator();
 
@@ -44,8 +46,13 @@ const AppNavigator: React.FC = () => {
     <Stack.Navigator initialRouteName={ /* showOnboarding ? "Onboarding" : "SignIn"} */ "onBoarding"}>
       <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
       <Stack.Screen name="SignIn" options={{ headerShown: false }}>
-        {(props) => <SignInScreen />} 
+        {(props) => <SignInScreen signInUseCase={DIContainer.signInUseCase} />} 
       </Stack.Screen>
+
+      <Stack.Screen name="ChangeFirstPassword" options={{ headerShown: false }}>
+        {(props) => <ChangeFirstPassword />} 
+      </Stack.Screen>
+
       <Stack.Screen name="ForgotPassword" options={{ headerShown: false }}>
         {(props) => <ForgotPasswordScreen />} 
       </Stack.Screen>

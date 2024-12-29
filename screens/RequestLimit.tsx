@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
@@ -11,7 +11,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Button } from '../components/Button';
 import Header from '../components/Header';
 type RequestLimitScreenNavigationProp = StackNavigationProp<RootStackParamList, 'LimitForm'>;
-
+const {height} = Dimensions.get('window')
 const RequestLimit = () => {
     const navigation = useNavigation<RequestLimitScreenNavigationProp>();   
     const [selectedTab ,setSelectedTab] = useState('Financement') ;
@@ -33,8 +33,7 @@ const RequestLimit = () => {
     
     <SafeAreaView style={{    flex: 1,
         backgroundColor: '#fff',
-        paddingTop: 20
-        
+        paddingTop: 20,
     }}>
         <ScrollView 
         showsVerticalScrollIndicator={false}
@@ -59,7 +58,7 @@ const RequestLimit = () => {
                     />
                 </TouchableOpacity>
         </View>
-        <View style={{gap: 10}}>
+        <View style={{gap: 10 , paddingBottom: height / 6}}>
             <View >
                 <Text style={globalStyles.inputTitle}>Assurence Limit</Text>
                 <Input placeholder="please enter Limit" value={limit} onChangeText={setLimit} keyboardType="numeric" />
@@ -103,8 +102,8 @@ const RequestLimit = () => {
                 </TouchableOpacity>
             </View>
             <View >
-                <Text style={globalStyles.inputTitle}>request deadline</Text>
-                <Input placeholder="please enter deadline" value={delaiDemande} onChangeText={setDelaidemande} keyboardType="numeric" />
+                <Text style={globalStyles.inputTitle}>Requested delay</Text>
+                <Input placeholder="please enter delay" value={delaiDemande} onChangeText={setDelaidemande} keyboardType="numeric" />
             </View >
             <View>
                 <Text style={[globalStyles.inputTitle]}>Financement Type</Text>

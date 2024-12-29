@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Switch, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../styles/globalStyles';
@@ -8,10 +8,30 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
 
 const NotificationsScreen = () => {
-  const [isEnabled1, setIsEnabled1] = useState(true);
-  const [isEnabled2, setIsEnabled2] = useState(false);
-  const [isEnabled3, setIsEnabled3] = useState(false);
+  const [isEnabledAll, setIsEnabledAll] = useState(false);
+  const [isEnabledBordereauState, setIsEnabledBordereauState] = useState(false);
+  const [isEnabledLimitState, setIsEnabledLimitState] = useState(false);
+  const [isEnabledLitigeState, setIsEnabledLitigeState] = useState(false);
+  const [isEnabledProrogationState, setIsEnabledProrogationState] = useState(false);
+
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Notifications'>>();
+  const ToggleAll = () => {
+    setIsEnabledAll(prev => {
+      setIsEnabledBordereauState(!prev)
+      setIsEnabledLimitState(!prev)
+      setIsEnabledLitigeState(!prev)
+      setIsEnabledProrogationState(!prev)
+
+      return !prev
+    })
+  }
+  useEffect(()=> {
+    if ( isEnabledBordereauState && isEnabledLimitState && isEnabledLitigeState && isEnabledProrogationState ) {
+      setIsEnabledAll(true)
+    }else {
+      setIsEnabledAll(false)
+    }
+  }, [ isEnabledBordereauState , isEnabledLimitState , isEnabledLitigeState, isEnabledProrogationState])
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
@@ -22,26 +42,41 @@ const NotificationsScreen = () => {
 
     <View style={styles.container}>
       <View style={styles.notificationRow}>
-        <Text style={styles.notificationText}>Notification type 1</Text>
+        <Text style={styles.notificationText}>All notifications</Text>
         <Switch
-          value={isEnabled1}
-          onValueChange={setIsEnabled1}
+          value={isEnabledAll}
+          onValueChange={ToggleAll}
         />
       </View>
 
       <View style={styles.notificationRow}>
-        <Text style={styles.notificationText}>Notification type 2</Text>
+        <Text style={styles.notificationText}>Bordereau state</Text>
         <Switch
-          value={isEnabled2}
-          onValueChange={setIsEnabled2}
+          value={isEnabledBordereauState}
+          onValueChange={setIsEnabledBordereauState}
         />
       </View>
 
       <View style={styles.notificationRow}>
-        <Text style={styles.notificationText}>Notification type 3</Text>
+        <Text style={styles.notificationText}>Limit State</Text>
         <Switch
-          value={isEnabled3}
-          onValueChange={setIsEnabled3}
+          value={isEnabledLimitState}
+          onValueChange={setIsEnabledLimitState}
+        />
+      </View>
+
+      <View style={styles.notificationRow}>
+        <Text style={styles.notificationText}>Litige State</Text>
+        <Switch
+          value={isEnabledLitigeState}
+          onValueChange={setIsEnabledLitigeState}
+        />
+      </View>
+      <View style={styles.notificationRow}>
+        <Text style={styles.notificationText}>Prorogation State</Text>
+        <Switch
+          value={isEnabledProrogationState}
+          onValueChange={setIsEnabledProrogationState}
         />
       </View>
     </View>

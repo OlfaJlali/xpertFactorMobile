@@ -1,13 +1,15 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Animated } from 'react-native';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { View, Text, Image, TouchableOpacity, SafeAreaView, StyleSheet, Animated, Platform } from 'react-native';
 import { useSearch } from '../hooks/useSearch';
 import { SearchList } from '../components/SearchList';
 import { buyersData } from '../data/buyers';
 import { BuyerDatatype } from '../types/buyersDataTypes';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationTypes';
-import { COLOR_BLACK, globalStyles, H2_SIZE, H3_SIZE } from '../styles/globalStyles';
+import { COLOR_BLACK, COLOR_MAIN, globalStyles, H2_SIZE, H3_SIZE } from '../styles/globalStyles';
+import { useShow } from '../context/ShowContext';
+import Icon from '../utils/Icons';
 
 type BuyerLitigeProps = {
   handlePress : (item : any) => void
@@ -24,7 +26,7 @@ const BuyerLitige : React.FC<BuyerLitigeProps>= ({handlePress , pageTitle}) => {
   );
 
   const slideAnim = useRef(new Animated.Value(50)).current; // Start off-screen (50px below)
-
+const {setShow } = useShow()
   useEffect(() => {
     Animated.timing(slideAnim, {
       toValue: 0,
@@ -33,9 +35,37 @@ const BuyerLitige : React.FC<BuyerLitigeProps>= ({handlePress , pageTitle}) => {
     }).start();
   }, [slideAnim]);
 
+
+useFocusEffect(
+  useCallback(() => {
+    setShow(true);
+  }, [setShow])
+);
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={globalStyles.PageTitle}>{pageTitle}</Text>
+      <View
+  style={{
+    paddingBottom: 30,
+    paddingLeft: 10,
+    // paddingTop: Platform.OS === 'ios' ? 20 : 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between', // Distributes items to the edges
+    alignItems: 'center',           // Vertically centers items
+  }}
+>
+  
+<Text style={globalStyles.PageTitle}>{pageTitle}</Text>
+<TouchableOpacity
+  onPress={() => {
+    setShow(false);
+    
+    navigation.navigate('BordoreauxStarter')}}
+  >
+  <Icon name='Info' color={COLOR_MAIN} size={24}   />
+  </TouchableOpacity>
+</View>
+
 
       <SearchList
         text='please select a buyer'

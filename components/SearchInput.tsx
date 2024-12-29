@@ -1,28 +1,34 @@
 import React from "react";
-import { View, TextInput, StyleSheet } from "react-native";
+import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "../utils/Icons";
 
 const SearchInput = ({ searchQuery, onSearch }: any) => {
   return (
     <View style={styles.container}>
-      <View style={styles.icon}  >
-      <Icon 
-        name="Search" 
-        size={20} 
-        color="#3E77BC" 
-        
-      />
+      {/* Search Icon */}
+      <View style={styles.icon}>
+        <Icon name="Search" size={20} color="#3E77BC" />
       </View>
-      
+
+      {/* TextInput */}
       <TextInput
         placeholder="Search"
-        clearButtonMode="always"
         autoCapitalize="none"
         autoCorrect={false}
         style={styles.input}
         value={searchQuery}
         onChangeText={onSearch}
       />
+
+      {/* Clear Button */}
+      {searchQuery.length > 0 && (
+        <TouchableOpacity
+          style={styles.clearButton}
+          onPress={() => onSearch("")} // Clear the search query
+        >
+          <Icon name="CircleX" size={20} color="#888" />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -32,12 +38,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
-    paddingVertical: 10,
     position: "relative",
   },
   icon: {
     position: "absolute",
-    left: 10, // Adjust as needed to position the icon inside the input
+    left: 10,
     zIndex: 1,
   },
   input: {
@@ -46,8 +51,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#000",
     borderRadius: 8,
-    paddingLeft: 40, // Add padding to prevent text from overlapping the icon
-    paddingRight: 10,
+    paddingLeft: 40, // Prevent text overlap with the search icon
+    paddingRight: 40, // Prevent text overlap with the clear button
+  },
+  clearButton: {
+    position: "absolute",
+    right: 10,
+    zIndex: 1,
   },
 });
 

@@ -1,20 +1,34 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { LocalStorageService } from '../data/storage/LocalStorageService';
+import { User } from '../domain/entities/User';
 
 // Define the context type
 interface AuthContextType {
-  isAuthed: boolean;
-  setIsAuthed: (isAuthed: boolean) => void;
+  isAuthenticated: boolean;
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoading: boolean; // New loading state
 }
 
 // Create the context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Provider component
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isAuthed, setIsAuthed] = useState(false);
+export const AuthProvider: React.FC<{ children: React.ReactNode; storageService: LocalStorageService }> = ({ children, storageService }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true); // Default to true
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const user = await storageService.get<User>('user');
+      setIsAuthenticated(!!user?.token);
+      setIsLoading(false); // Set loading to false after auth check
+    };
+
+    checkAuth();
+  }, [storageService]);
 
   return (
-    <AuthContext.Provider value={{ isAuthed, setIsAuthed }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,4 +1,4 @@
-import { createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack";
 import BordoreauxFormScreen from "../screens/BordoreauxForm";
 import BordoreauxScreen from "../screens/BordoreauxScreen";
 import CongratulationsScreen from "../screens/CongratulationScreen";
@@ -12,6 +12,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ActivityIndicator, Text, View } from "react-native";
 import { COLOR_MAIN } from "../styles/globalStyles";
 import LoadingView from "../components/LoadingView";
+import { useNavigation } from "@react-navigation/native";
+import { useNavigationHook } from "../hooks/useNavigation";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -21,6 +23,9 @@ export const BordereauxStackNavigator = () => {
   // const handlePress = (buyer: BuyerDatatype) => {
   //   navigation.navigate("LitigeDocument", buyer);
   // };
+
+  const { navigateToTarget} = useNavigationHook('Bordoreaux')
+
 
   const { setSelectedIndex } = useTab();
   const { setShow } = useShow();  
@@ -62,7 +67,10 @@ export const BordereauxStackNavigator = () => {
 
   return (
       <Stack.Navigator initialRouteName={/*showOnboarding ? "BordoreauxStarter" : "Bordoreaux" */ "BordoreauxStarter"} >
-        <Stack.Screen name='BordoreauxStarter' component={BordoreauxStarter}  options={{ headerShown: false }}/>
+        <Stack.Screen name="BordoreauxStarter" options={{ headerShown: false }}>
+      {() => <BordoreauxStarter buttonAction={navigateToTarget}  title="About bordoreaux documents" />}
+    </Stack.Screen>
+        
       <Stack.Screen name='Bordoreaux' component={BordoreauxScreen} options={{ headerShown: false }}/>
       <Stack.Screen name="BordoreauxForm" component={BordoreauxFormScreen} options={{ headerShown: false }}/>
       {/* <Stack.Screen name="Congratulations" component={CongratulationsScreen} /> */}

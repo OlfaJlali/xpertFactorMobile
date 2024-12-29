@@ -1,28 +1,41 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { Button } from '../components/Button';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../types/navigationTypes';
-import { useShow } from '../context/ShowContext';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { useShow } from '../context/ShowContext';
+import { useFocusEffect } from '@react-navigation/native';
 
-type VerifyScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
+type BordoreauxStarterProps = {
+  title: string;
+  descriptions?: string[];
+  buttonText?: string;
+  buttonAction: () => void;
+};
 
-const BordoreauxStarter = () => {
-  const navigation = useNavigation<VerifyScreenNavigationProp>();
-  const { show, setShow } = useShow();
-
+const BordoreauxStarter: React.FC<BordoreauxStarterProps> = ({
+  title ,
+  descriptions = [
+    'Choose the desired amount, number of documents, date, and year.',
+    "Set every document's info and scan the document.",
+  ],
+  buttonText = 'Got it',
+  buttonAction
+}) => {
   const imageScale = useSharedValue(0);
   const textOpacity = useSharedValue(0);
 
   useEffect(() => {
-    setShow(false);
-
     // Trigger animations
     imageScale.value = withTiming(1, { duration: 1000 });
     textOpacity.value = withTiming(1, { duration: 1500 });
   }, []);
+  const { setShow } = useShow();
+
+  useFocusEffect(
+    useCallback(() => {
+      setShow(false);
+    }, [setShow])
+  );
 
   const animatedImageStyle = useAnimatedStyle(() => ({
     transform: [{ scale: imageScale.value }],
@@ -32,11 +45,6 @@ const BordoreauxStarter = () => {
     opacity: textOpacity.value,
   }));
 
-  const goToBordoreaux = () => {
-    navigation.navigate('Bordoreaux');
-    setShow(true);
-  };
-
   return (
     <View style={styles.container}>
       {/* Animated Image */}
@@ -45,27 +53,28 @@ const BordoreauxStarter = () => {
       </Animated.View>
 
       {/* Animated Title */}
-      <Animated.Text style={[styles.title, animatedTextStyle]}>
-        Start managing your bordereau and stay up to date.
-      </Animated.Text>
+      <Animated.Text style={[styles.title, animatedTextStyle]}>{title}</Animated.Text>
 
-      {/* Static Description */}
-      <View style={styles.item}>
-        <Text style={styles.description}>
-          Choose the desired amount, number of documents, date, and year.
-        </Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.description}>Set every document's info and scan the document.</Text>
-      </View>
-
+      {/* Descriptions */}
+      {descriptions.map((description, index) => (
+  <View key={index} style={styles.item}>
+    <Text style={[styles.description, styles.bullet]}>
+      • {description} {/* Bullet point with additional styling */}
+    </Text>
+  </View>
+))}
       {/* Button */}
-      <Button title={'Got it'} onPress={goToBordoreaux} disabled={false} />
+      <Button title={buttonText} onPress={buttonAction} disabled={false} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  bullet: {
+    marginRight: 8, // Add spacing between the bullet and text
+    fontSize: 18, // Customize bullet size
+    color: '#666', // Customize bullet color
+  },
   container: {
     flex: 1,
     backgroundColor: '#F9F9F9',
@@ -93,7 +102,6 @@ const styles = StyleSheet.create({
   },
   item: {
     flexDirection: 'row',
-    alignItems: 'center',
     marginVertical: 10,
   },
   description: {

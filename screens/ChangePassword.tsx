@@ -13,14 +13,35 @@ const ChangePasswordScreen: React.FC = () => {
   type ChangePasswordScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ChangePasswordScreen'>;
   const navigation = useNavigation<ChangePasswordScreenNavigationProp>();
 
-  // Check if the passwords match and both fields are non-empty
-  const isFormValid = password && verifyPassword && password === verifyPassword;
+  // Helper function to validate password
+  const isPasswordValid = (pwd: string) => {
+    return pwd.length >= 6 && /\d/.test(pwd); // At least 6 characters and contains a number
+  };
+
+  // Generate validation messages
+  const passwordErrorMessage = password.length < 6 
+    ? 'Password must be at least 6 characters long.' 
+    : !/\d/.test(password) 
+      ? 'Password must contain at least one number.' 
+      : '';
+
+  const verifyPasswordErrorMessage = 
+    password !== verifyPassword && verifyPassword 
+      ? 'Passwords do not match.' 
+      : '';
+
+  // Check if the form is valid
+  const isFormValid = 
+    isPasswordValid(password) && 
+    password === verifyPassword;
 
   const handleSave = () => {
     if (isFormValid) {
-      console.log('Passwords match! Saving...');
-      navigation.navigate('SignIn')
+      console.log('Passwords match and are valid! Saving...');
+      navigation.navigate('SignIn');
       // Add password save logic here
+    } else {
+      console.log('Password validation failed.');
     }
   };
 
@@ -35,6 +56,9 @@ const ChangePasswordScreen: React.FC = () => {
           onChangeText={setPassword} 
           secureTextEntry 
         />
+        {passwordErrorMessage ? (
+          <Text style={signInScreenStyles.errorText}>{passwordErrorMessage}</Text>
+        ) : null}
         {/* Input for verifying password */}
         <Input 
           placeholder="Verify New Password" 
@@ -42,6 +66,9 @@ const ChangePasswordScreen: React.FC = () => {
           onChangeText={setVerifyPassword} 
           secureTextEntry 
         />
+        {verifyPasswordErrorMessage ? (
+          <Text style={signInScreenStyles.errorText}>{verifyPasswordErrorMessage}</Text>
+        ) : null}
         {/* Save button with disabled condition */}
         <Button 
           title="Save" 

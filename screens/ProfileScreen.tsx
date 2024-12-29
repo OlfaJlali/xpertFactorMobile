@@ -1,6 +1,6 @@
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { RootStackParamList } from '../types/navigationTypes';
 import Icon from '../utils/Icons';
@@ -13,20 +13,37 @@ interface ProfileImage {
   uri: string;
 }
 import { Alert } from 'react-native';
+import { useShow } from '../context/ShowContext';
+import { LocalStorageService } from '../data/storage/LocalStorageService';
 
+const storageService = new LocalStorageService();
 
 const ProfileScreen: React.FC = () => {
     type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Profile'>;
     const navigation = useNavigation<ProfileScreenNavigationProp>();
-    const { setIsAuthed } = useAuth();
+    const { setIsAuthenticated } = useAuth();
+    const {setShow} = useShow()
+    useFocusEffect(
+      useCallback(() => {
+        setShow(true);
+      }, [setShow])
+    );
+  
+  
+
     const handleGotoMyAccount = () => {
       navigation.navigate('MyAccount'); 
     };
+    const handlePrivacyPolicy = () => {
+      setShow(false)
+      navigation.navigate("PrivacyPolicy")
+    }
     const handleGotoSettings = () => {
     navigation.navigate('Settings');
   }
-  const logout = () => {
-    setIsAuthed(false)
+  const logout = async () => {
+    await storageService.remove('user');
+    setIsAuthenticated(false);
   }
   const [profileImage, setProfileImage] = useState<ProfileImage | null>(null);
 
@@ -127,7 +144,7 @@ const ProfileScreen: React.FC = () => {
           <Text style={styles.menuText}>Settings</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity style={styles.menuItem} onPress={handlePrivacyPolicy}>
           <View style={styles.iconContainer}>
           <Icon name={'Lock'} size={24} color={ '#282534' } />
           </View>

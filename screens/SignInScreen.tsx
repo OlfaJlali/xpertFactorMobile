@@ -1,16 +1,36 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Animated, Dimensions, Image, Keyboard, SafeAreaView, Text, View } from 'react-native';
-import { useSignIn } from '../hooks/useSignIn';
+// import { useSignIn } from '../hooks/useSignIn';
 import { Input } from '../components/TextInput';
 import { Button } from '../components/Button';
 import { TextLink } from '../components/TextLink';
 import { signInScreenStyles } from '../styles/signInScreenStyles';
 import { globalStyles } from '../styles/globalStyles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { SignInUseCase } from '../domain/usecases/SignInUseCase';
+import { useSignInViewModel } from '../viewmodels/SignInViewModel';
+import { useAuth } from '../context/AuthContext';
+import { LocalStorageService } from '../data/storage/LocalStorageService';
+import { User } from '../domain/entities/User';
+interface SignInScreenProps {
+  signInUseCase: SignInUseCase;
+}
+const storageService = new LocalStorageService();
 
-export function SignInScreen() {
-  const { email, setEmail, password, setPassword, handleSignIn, handleForgotPassword } = useSignIn();
+export const SignInScreen: React.FC<SignInScreenProps> = ({ signInUseCase }) => {
+  const { signIn, loading, error } = useSignInViewModel(signInUseCase);
+  const {setIsAuthenticated} = useAuth()
   const { width } = Dimensions.get('window');
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
+  const handleSignIn = async () => {
+    const user: User | null = await signIn(identifier, password);
+    if (user) {
+      console.log('Signed in user:', user);
+      await storageService.save<User>('user', user); // Save user data after login
+      setIsAuthenticated(true);
+    }
+  };
 
   // Animated values for the components
   const opacity = useRef(new Animated.Value(0)).current;
@@ -45,11 +65,12 @@ export function SignInScreen() {
 
         <Image source={require('../assets/login.png')} style={{ height: '50%', width: width }} />
        
-          <Input placeholder="Email" value={email} onChangeText={setEmail} keyboardType="email-address" />
+          <Input placeholder="identifier" value={identifier} onChangeText={setIdentifier} keyboardType='default' />
           <Input placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry />
-          <Button title="Sign In" onPress={handleSignIn} disabled={false} />
+          {error && <Text style={{ color: 'red' }}>{error}</Text>}
+          <Button  title="Sign In" onPress={handleSignIn} disabled={!identifier.trim() || !password.trim()} loading={loading}  />
           <Text>Have you forgotten your password?</Text>
-          <TextLink text="Click here to recover it" onPress={handleForgotPassword} />
+          {/* <TextLink text="Click here to recover it" onPress={handleForgotPassword} /> */}
         </Animated.View>
       </KeyboardAwareScrollView>
     </SafeAreaView>

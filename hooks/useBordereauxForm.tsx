@@ -2,9 +2,9 @@ import { useState, useRef, useEffect } from 'react';
 import { FlatList } from 'react-native';
 
 export const useBordereauxForm = () => {
-  const [totalAmount, setTotalAmount] = useState('1000000000');
+  const [totalAmount, setTotalAmount] = useState('0');
   const [selectedYear, setSelectedYear] = useState(2024);
-  const [documentCount, setDocumentCount] = useState('1');
+  const [documentCount, setDocumentCount] = useState('0');
   const [date, setDate] = useState(new Date());
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const flatListRef = useRef<FlatList<number>>(null);

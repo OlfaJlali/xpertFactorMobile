@@ -13,6 +13,8 @@ import { useTab } from "../context/TabContext";
 import { useShow } from "../context/ShowContext";
 import { useRendering } from "../context/RenderingContext";
 import LimitBuyerScreen from "../screens/LimitBuyerScreen";
+import BordoreauxStarter from "../screens/BordoreauxStarter";
+import { useNavigationHook } from "../hooks/useNavigation";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -27,6 +29,8 @@ export const LimitStackNavigator = () => {
   };
   const { setSelectedIndex } = useTab();
   const { setShow } = useShow();  
+  const { navigateToTarget} = useNavigationHook('LimitBuyer')
+
   // const {selectedIndexBis , setSelectedIndexBis} = useAdditionalTab()
   const { setRenderingCurrent} = useRendering()
   const goToDashboard = () => {
@@ -37,14 +41,19 @@ export const LimitStackNavigator = () => {
     };
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName={/*showOnboarding ? "BordoreauxStarter" : "Bordoreaux" */ "BordoreauxStarter"} >
       <Stack.Screen
         name="LimitBuyer"
         component={LimitBuyerScreen}
+        options={{ headerShown: false }}
       />
-      <Stack.Screen name="LimitForm" component={RequestLimit} />
+       <Stack.Screen name="BordoreauxStarter" options={{ headerShown: false }}>
+      {() => <BordoreauxStarter buttonAction={navigateToTarget}  title="About limit request" descriptions={["You need to select a buyer and  the desired document" , "Fill up the given form with valid data" , "After submit your request would be under review"]}/>}
+    </Stack.Screen>
 
-      <Stack.Screen name="Congratulations">
+      <Stack.Screen name="LimitForm" component={RequestLimit} options={{ headerShown: false }} />
+
+      <Stack.Screen name="Congratulations" options={{ headerShown: false }}>
         {() => <CongratulationsScreen onPress={goToDashboard} text="your request is successfully sent" />}
       </Stack.Screen>
 

@@ -9,27 +9,43 @@ import {
   Platform,
   ScrollView,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import { RootStackParamList } from '../types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { Input } from '../components/TextInput';
-import { isValidEmail } from '../utils/validation';
+
 const { width } = Dimensions.get('window');
 
-const ForgotPasswordScreen: React.FC = () => {
-  const [email, setEmail] = useState('');
+const ChangeFirstPassword: React.FC = () => {
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [buttonEnabled, setButtonEnabled] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Animated values for the container
-  const fadeAnim = useRef(new Animated.Value(0)).current; // Opacity animation
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   type VerifyScreenNavigationProp = StackNavigationProp<RootStackParamList, 'VerifyScreen'>;
   const navigation = useNavigation<VerifyScreenNavigationProp>();
 
   useEffect(() => {
-    setButtonEnabled(isValidEmail(email));
-  }, [email]);
+    // Password validation logic
+    if (password.length === 0) {
+      setErrorMessage('');
+      setButtonEnabled(false);
+    } else if (password.length < 6) {
+      setErrorMessage('Password must be at least 6 characters long.');
+      setButtonEnabled(false);
+    } else if (!/\d/.test(password)) {
+      setErrorMessage('Password must contain at least one number.');
+      setButtonEnabled(false);
+    } else {
+      setErrorMessage('');
+      setButtonEnabled(true);
+    }
+  }, [password]);
 
   useEffect(() => {
     // Animate the container when the screen loads
@@ -43,14 +59,20 @@ const ForgotPasswordScreen: React.FC = () => {
   }, [fadeAnim]);
 
   const handleRecoverPassword = () => {
-    navigation.navigate('VerifyScreen');
+    if (!buttonEnabled) return;
+
+    setLoading(true); // Show the loader
+    setTimeout(() => {
+      setLoading(false); // Hide the loader after backend response
+      navigation.navigate('SignIn'); // Navigate to SignIn
+    }, 2000); // Simulated backend response time (2 seconds)
   };
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined} // Adjust behavior for iOS or Android
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0} // Offset for iOS devices
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
     >
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
@@ -62,30 +84,37 @@ const ForgotPasswordScreen: React.FC = () => {
             { opacity: fadeAnim },
           ]}
         >
-          <Text style={styles.title}>Forgot Password?</Text>
+          <Text style={styles.title}>Create new password</Text>
           <Text style={styles.subtitle}>
-            Please enter your email to recover your password.
+            Please enter a new password.
           </Text>
-          <Text style={styles.label}>Email</Text>
+          <Text style={styles.label}>Password</Text>
           <Input
-            placeholder="Enter your email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
+            placeholder="Enter new password"
+            value={password}
+            onChangeText={setPassword}
+            keyboardType="default"
+            secureTextEntry
           />
+          {errorMessage ? (
+            <Text style={styles.errorText}>{errorMessage}</Text>
+          ) : null}
         </Animated.View>
         <TouchableOpacity
-        style={[
-          styles.button,
-          { backgroundColor: buttonEnabled ? '#3E77BC' : '#A0B9D9' },
-        ]}
-        onPress={handleRecoverPassword}
-        disabled={!buttonEnabled}
-      >
-        <Text style={styles.buttonText}>Recover Password</Text>
-      </TouchableOpacity>
+          style={[
+            styles.button,
+            { backgroundColor: buttonEnabled && !loading ? '#3E77BC' : '#A0B9D9' },
+          ]}
+          onPress={handleRecoverPassword}
+          disabled={!buttonEnabled || loading}
+        >
+          {loading ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>Create new password</Text>
+          )}
+        </TouchableOpacity>
       </ScrollView>
-
     </KeyboardAvoidingView>
   );
 };
@@ -97,11 +126,11 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flexGrow: 1,
-    justifyContent: 'center', // Centers content vertically
+    justifyContent: 'center',
     paddingHorizontal: 20,
   },
   innerContainer: {
-    alignItems: 'center', // Centers content horizontally
+    alignItems: 'center',
     paddingBottom: 20,
   },
   title: {
@@ -123,6 +152,12 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginBottom: 8,
   },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 5,
+    alignSelf: 'flex-start',
+  },
   button: {
     width: width * 0.9,
     height: 50,
@@ -138,4 +173,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForgotPasswordScreen;
+export default ChangeFirstPassword;

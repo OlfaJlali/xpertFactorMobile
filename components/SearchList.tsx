@@ -30,20 +30,22 @@ export const SearchList = <T,>({
   addIcon = false
 }: SearchListProps<T>) => (
   <View style={styles.container}>
-         
-        {addIcon ? ( <View style={{    flexDirection: 'row',
-          justifyContent: 'space-between',
-      }}>
-          <Text style={globalStyles.inputTitle}>{text}</Text>
-          <TouchableOpacity onPress={() => console.log('Plus button pressed')}>
-              <Icon name='CirclePlus' size={24} color={COLOR_MAIN} />
-              </TouchableOpacity>
-      </View>)  :  <Text style={globalStyles.inputTitle}>{text}</Text>
-        }
-    <SearchInput 
-    searchQuery={searchQuery}
-    onSearch={onSearch}
-    />
+    <View style={{  flexDirection: 'row' , justifyContent: 'space-between'}}>
+    <Text style={globalStyles.inputTitle}>{text}</Text>
+         {addIcon &&(
+         <TouchableOpacity onPress={() => console.log('Plus button pressed')} style={{backgroundColor: COLOR_MAIN , borderRadius: 20} }>
+         <Icon name='CirclePlus' size={37} color={'#FFF'} />
+         </TouchableOpacity>
+     )}  
+    </View>
+
+ 
+        <SearchInput 
+        searchQuery={searchQuery}
+        onSearch={onSearch}
+        />
+    
+    
     
     {data.length > 0 ? (
       <FlatList

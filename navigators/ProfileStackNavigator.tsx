@@ -5,6 +5,7 @@ import MyAccountScreen from "../screens/MyAccountScreen";
 import SettingsScreen from "../screens/SettingsScreens";
 import ResetPasswordScreen from "../screens/ResetPasswordScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
+import PrivacyPolicyScreen from "../screens/PrivacyPolicyScreen";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -16,6 +17,9 @@ export const ProfileStackNavigator = () => {
         <Stack.Screen name='Settings' component={SettingsScreen} />
         <Stack.Screen name='ResetPassword' component={ResetPasswordScreen} />
         <Stack.Screen name='Notifications' component={NotificationsScreen} />
+        <Stack.Screen name='PrivacyPolicy' component={PrivacyPolicyScreen} />
+
+
 
 
     </Stack.Navigator>
