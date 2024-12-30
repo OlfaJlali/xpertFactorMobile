@@ -48,6 +48,7 @@ const [scannedImages , setScannedImages] = useState<string[]>([])
   const [scannedImage, setScannedImage] = useState<string | undefined>(undefined);
 
   const scanDocument = async () => {
+    console.log('scanning...')
     // start the document scanner
     const { scannedImages, status } = await DocumentScanner.scanDocument({
       maxNumDocuments: 2

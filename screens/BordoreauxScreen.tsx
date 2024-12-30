@@ -98,10 +98,10 @@ useFocusEffect(
 <View >
 
 <Text style={styles.sectionTitle}>Mode of Payment</Text>
-<TouchableWithoutFeedback 
+{/* <TouchableWithoutFeedback 
                   onPress={Keyboard.dismiss}
                   accessible={false} // Ensures the accessibility focus isn't blocked
-                  >
+                  > */}
   <View style={styles.inputContainer} >
     <Text style={styles.label}>Enter amount</Text>
     <View style={styles.AmountinputContainer}>
@@ -126,7 +126,7 @@ useFocusEffect(
       <Text style={styles.input}>Document</Text>
     </View>
     </View>
-    </TouchableWithoutFeedback>
+    {/* </TouchableWithoutFeedback> */}
 
 
 {/* <DocsAndAmountFom /> */}
