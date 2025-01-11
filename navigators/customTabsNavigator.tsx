@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, Animated, Text, Platform } from 'react-native';
 import { TabsNavigator } from '../components/BottomSheet';
 import { useTab } from '../context/TabContext';
@@ -47,7 +47,7 @@ const CustomTabsNavigator: React.FC = () => {
   const CurrentScreen = screens[selectedIndex].component;
   const AdditionalScreensRenderer = AdditionalScreens[selectedIndexBis].component;
   const {user , loading, fetchUser} = useGetCurrentUser();
-  const slideAnim = new Animated.Value(100);
+  const slideAnim = useRef(new Animated.Value(100)).current;
 
   useEffect(() => {
     if (show) {
@@ -75,7 +75,6 @@ const CustomTabsNavigator: React.FC = () => {
       }else {
         Intercom.loginUnidentifiedUser();
       }
-      Intercom.setLauncherVisibility(Visibility.VISIBLE);
         if(Platform.OS === 'ios') {
               Intercom.setBottomPadding(80)
 
@@ -83,6 +82,8 @@ const CustomTabsNavigator: React.FC = () => {
               Intercom.setBottomPadding(300)
 
         }
+        Intercom.setLauncherVisibility(Visibility.VISIBLE);
+
     } else  {
       Intercom.setLauncherVisibility(Visibility.GONE);
 

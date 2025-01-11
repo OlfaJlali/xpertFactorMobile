@@ -36,7 +36,7 @@ class MainApplication : Application(), ReactApplication {
   override fun onCreate() {
     super.onCreate()
     SoLoader.init(this, false)
-    IntercomModule.initialize(this,"android_sdk-c75f927be18437ab7b9e188cf92b8e7ad7772608", "ht37sk3b")
+    IntercomModule.initialize(this,"android_sdk-27507990d48a2610430894bacf4bf48e3bc9836d", "zbazopzd")
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
       // If you opted-in for the New Architecture, we load the native entry point for this app.
       load()
