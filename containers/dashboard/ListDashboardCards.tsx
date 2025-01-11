@@ -1,0 +1,42 @@
+import React from 'react';
+import { View } from 'react-native';
+import Animated from 'react-native-reanimated';
+import CardsSliderItem from '../../components/CardsSliderItem';
+import { useScrollHandler } from '../../hooks/useScrollHandler';
+import { ListDashboardsStyle } from '../../styles/ListDashboardCardsStyle';
+import { Contract } from '../../domain/entities/Contract';
+
+
+type ListDashboardCardsProps = {
+    setCurrentIndex : React.Dispatch<React.SetStateAction<number>>
+    contracts: Contract[]
+}
+
+export function ListDashboardCards({ setCurrentIndex , contracts} : ListDashboardCardsProps) {
+    const Separator = () => <View style={{ width: 10 }} />;
+    const { scrollX, onScrollHandler, onMomentumScrollEnd } = useScrollHandler(setCurrentIndex);
+
+    return (
+        <View style={ListDashboardsStyle.cardContainer}>
+            <Animated.FlatList
+                data={contracts}
+                renderItem={({ item, index }) => (
+                    <CardsSliderItem
+                        item={item}
+                        index={index}
+                        scrollX={scrollX}
+                    />
+                )}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                pagingEnabled
+                ItemSeparatorComponent={Separator}
+                onScroll={onScrollHandler as any} 
+                onMomentumScrollEnd={onMomentumScrollEnd}
+                scrollEventThrottle={16}
+            />
+        </View>
+    );
+}
+
+export default ListDashboardCards;

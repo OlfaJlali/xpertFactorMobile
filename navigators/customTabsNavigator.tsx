@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { View, Animated, Text } from 'react-native';
+import { View, Animated, Text, Platform } from 'react-native';
 import { TabsNavigator } from '../components/BottomSheet';
 import { useTab } from '../context/TabContext';
 import { useAdditionalTab } from '../context/AdditionalTabContext';
 import { useShow } from '../context/ShowContext';
 import { useRendering } from '../context/RenderingContext';
-import DashboardScreen from '../screens/DashboardScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import DashboardScreen from '../screens/DashboardStack/DashboardScreen';
+import ProfileScreen from '../screens/ProfileStack/ProfileScreen';
 import { BordereauxStackNavigator } from './BordoreauxStackNavigator';
 import { ProfileStackNavigator } from './ProfileStackNavigator';
 import { RequestFinancementStackNavigator } from './RequestFinancementStackNavigator';
@@ -17,6 +17,8 @@ import { ProrogationStackNavigator } from './ProrogationStackNavigator';
 import { BuyerStackNavigator } from './BuyerStackNavigator';
 import StatisticsScreen from '../screens/StatisticsScreen';
 import Intercom, { Visibility } from '@intercom/intercom-react-native';
+import { useAuth } from '../context/AuthContext';
+import { useGetCurrentUser } from '../hooks/useGetCurrentUser';
 
 const CustomTabsNavigator: React.FC = () => {
   const { selectedIndex, setSelectedIndex } = useTab();
@@ -44,7 +46,7 @@ const CustomTabsNavigator: React.FC = () => {
 
   const CurrentScreen = screens[selectedIndex].component;
   const AdditionalScreensRenderer = AdditionalScreens[selectedIndexBis].component;
-
+  const {user , loading, fetchUser} = useGetCurrentUser();
   const slideAnim = new Animated.Value(100);
 
   useEffect(() => {
@@ -64,22 +66,28 @@ const CustomTabsNavigator: React.FC = () => {
     }
   }, [show]);
   useEffect(() => {
-    if(selectedIndex == 0){
-      Intercom.loginUnidentifiedUser();
-      Intercom.setLauncherVisibility(Visibility.VISIBLE);
-      if(show){
-        Intercom.setBottomPadding(80)
+    const isDashboardScreenActive = selectedIndex === 0 && CurrentScreen === DashboardScreen;
+
+    if(isDashboardScreenActive && renderingCurrent){
+      // Intercom.loginUnidentifiedUser();
+      if(user){
+        Intercom.loginUserWithUserAttributes({email:user?.email,userId:user?.identifier})
       }else {
-        Intercom.setBottomPadding(200)
-
+        Intercom.loginUnidentifiedUser();
       }
+      Intercom.setLauncherVisibility(Visibility.VISIBLE);
+        if(Platform.OS === 'ios') {
+              Intercom.setBottomPadding(80)
 
+        }else {
+              Intercom.setBottomPadding(300)
 
-    } else {
+        }
+    } else  {
       Intercom.setLauncherVisibility(Visibility.GONE);
 
     }
-  }, [selectedIndex , show]);
+  }, [selectedIndex , AdditionalScreens, show,user]);
 
   return (
     <View style={{ flex: 1 }}>

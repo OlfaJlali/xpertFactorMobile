@@ -17,10 +17,10 @@ const storageService = new LocalStorageService();
 const App: React.FC = () => {
 
 
-  useEffect(() => {
-    Intercom.loginUnidentifiedUser();
-    Intercom.setLauncherVisibility(Visibility.GONE);
-  }, []);
+  // useEffect(() => {
+  //   Intercom.loginUnidentifiedUser();
+  //   Intercom.setLauncherVisibility(Visibility.GONE);
+  // }, []);
   
   
 

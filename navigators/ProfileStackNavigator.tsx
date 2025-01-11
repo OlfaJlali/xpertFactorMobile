@@ -1,11 +1,11 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { RootStackParamList } from "../types/navigationTypes";
-import ProfileScreen from "../screens/ProfileScreen";
-import MyAccountScreen from "../screens/MyAccountScreen";
-import SettingsScreen from "../screens/SettingsScreens";
-import ResetPasswordScreen from "../screens/ResetPasswordScreen";
-import NotificationsScreen from "../screens/NotificationsScreen";
-import PrivacyPolicyScreen from "../screens/PrivacyPolicyScreen";
+import ProfileScreen from "../screens/ProfileStack/ProfileScreen";
+import MyAccountScreen from "../screens/ProfileStack/MyAccountScreen";
+import SettingsScreen from "../screens/ProfileStack/SettingsScreens";
+import ResetPasswordScreen from "../screens/ProfileStack/ResetPasswordScreen";
+import NotificationsScreen from "../screens/ProfileStack/NotificationsScreen";
+import PrivacyPolicyScreen from "../screens/ProfileStack/PrivacyPolicyScreen";
 
 const Stack = createStackNavigator<RootStackParamList>();
 

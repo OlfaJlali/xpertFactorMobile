@@ -11,6 +11,8 @@ import Icon from '../utils/Icons';
 import { useShow } from '../context/ShowContext';
 import { useTabState } from '../hooks/useTabState';
 import { useTab } from '../context/TabContext';
+import { handleNumericInput } from '../utils/handleNumericInput';
+import { Button } from '../components/Button';
 type VerifyScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
 
 const BordereauxScreen: React.FC = () => {
@@ -28,6 +30,7 @@ const BordereauxScreen: React.FC = () => {
     setDate,
     flatListRef,
     years,
+    disabled
   } = useBordereauxForm();
   const {setShow} = useShow()
   const {} = useTabState
@@ -51,16 +54,15 @@ useFocusEffect(
 
   const handleGoToForm = () => {
     console.log('totalAmount:', totalAmount )
-    let docsCount = parseInt(documentCount)
-    console.log('documentCount:', docsCount )
+    console.log('documentCount:', documentCount )
     console.log('selectedYear:', selectedYear )
     console.log('date:', date )
 
     navigation.navigate('BordoreauxForm', {
-      totalAmount,
-      date,
+      totalAmount: totalAmount || 0,
+      date: date.toISOString(),
       selectedYear,
-      documentCount : docsCount ,  
+      documentCount : documentCount || 0 ,  
     });
   };
 
@@ -72,45 +74,28 @@ useFocusEffect(
           <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height' }
                 style={styles.container}>
-                <View
-  style={{
-    paddingBottom: 30,
-    paddingLeft: 10,
-    paddingTop: Platform.OS === 'ios' ? 20 : 0,
-    flexDirection: 'row',
-    justifyContent: 'space-between', // Distributes items to the edges
-    alignItems: 'center',           // Vertically centers items
-  }}
->
-  
-  <Text style={globalStyles.PageTitle}>Bordereau</Text>
-  <TouchableOpacity
-  onPress={() => {
-    
-    navigation.navigate('BordoreauxStarter')}}
-  >
-  <Icon name='Info' color={COLOR_MAIN} size={24}   />
-  </TouchableOpacity>
-</View>
+                <View style={styles.header}  >
+                  <Text style={globalStyles.PageTitle}>Bordereau</Text>
+                  <TouchableOpacity
+                  onPress={() => { navigation.navigate('BordoreauxStarter')}}>
+                  <Icon name='Info' color={COLOR_MAIN} size={24}   />
+                  </TouchableOpacity>
+              </View>
 
 
 
 <View >
 
 <Text style={styles.sectionTitle}>Mode of Payment</Text>
-{/* <TouchableWithoutFeedback 
-                  onPress={Keyboard.dismiss}
-                  accessible={false} // Ensures the accessibility focus isn't blocked
-                  > */}
   <View style={styles.inputContainer} >
     <Text style={styles.label}>Enter amount</Text>
     <View style={styles.AmountinputContainer}>
       <TextInput
         style={styles.input}
-        value={totalAmount}
-        onChangeText={setTotalAmount}
+        onChangeText={(text) => handleNumericInput(text, setTotalAmount)}
+        value={totalAmount !== null ? totalAmount.toString() : ''}
+        placeholder='amount'
         keyboardType="numeric"
-        
       />
       <Text style={styles.input}>TND</Text>
 
@@ -119,8 +104,9 @@ useFocusEffect(
     <View style={styles.AmountinputContainer}>
       <TextInput
         style={styles.input}
-        value={documentCount}
-        onChangeText={setDocumentCount}
+        value={documentCount !== null ? documentCount.toString() : ''}
+        onChangeText={(text) => handleNumericInput(text, setDocumentCount)}
+        placeholder='0'
         keyboardType="numeric"
       />
       <Text style={styles.input}>Document</Text>
@@ -132,17 +118,14 @@ useFocusEffect(
 {/* <DocsAndAmountFom /> */}
 <Text style={styles.sectionTitle}>Year and date</Text>
 
-<InterestPayment     
-selectedYear={selectedYear}
-setSelectedYear={setSelectedYear}
-date={date}
-setDate={setDate}
-/>     
-<View>
-      <TouchableOpacity style={styles.saveButton} onPress={handleGoToForm}>
-          <Text style={styles.saveButtonText}>Save</Text>
-        </TouchableOpacity> 
-      </View>
+      <InterestPayment     
+      selectedYear={selectedYear}
+      setSelectedYear={setSelectedYear}
+      date={date}
+      setDate={setDate}
+      />     
+     
+  <Button title='Save' onPress={handleGoToForm} disabled={disabled} />
 </View>
 
   
@@ -155,6 +138,15 @@ setDate={setDate}
 };
 
 const styles = StyleSheet.create({
+  header: {
+    paddingBottom: 30,
+    paddingLeft: 10,
+    paddingTop: Platform.OS === 'ios' ? 20 : 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between', // Distributes items to the edges
+    alignItems: 'center',           // Vertically centers items
+
+  },
   scrollViewContent: {
     flexGrow: 1,
     justifyContent: 'center',

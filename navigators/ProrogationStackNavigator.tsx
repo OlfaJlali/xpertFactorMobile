@@ -2,14 +2,13 @@ import { createStackNavigator, StackNavigationProp } from "@react-navigation/sta
 import { RootStackParamList } from "../types/navigationTypes";
 import CongratulationsScreen from "../screens/CongratulationScreen";
 import { useNavigation } from "@react-navigation/native";
-import { BuyerDatatype } from "../types/buyersDataTypes";
 import { useTab } from "../context/TabContext";
 import { useShow } from "../context/ShowContext";
 import { useAdditionalTab } from "../context/AdditionalTabContext";
 import { useRendering } from "../context/RenderingContext";
-import ProrogationBuyerScreen from "../screens/ProrogationBuyerScreen";
-import LitigeDocument from "../screens/LitigeDocument";
-import ProrogationDate from "../screens/ProrogationDate";
+import ProrogationBuyerScreen from "../screens/ProrogationStack/ProrogationBuyerScreen";
+import DocumentList from "../screens/ListStack/DocumentList";
+import ProrogationDate from "../screens/ProrogationStack/ProrogationDate";
 import BordoreauxStarter from "../screens/BordoreauxStarter";
 import { useNavigationHook } from "../hooks/useNavigation";
 
@@ -40,7 +39,7 @@ export const ProrogationStackNavigator = () => {
         component={ProrogationBuyerScreen}
         options={{ headerShown: false }}
       />
-        <Stack.Screen name='ProrogationDocument' component={LitigeDocument} initialParams={{ title: "Prorogation" }} options={{ headerShown: false }} />
+        <Stack.Screen name='ProrogationDocument' component={DocumentList} initialParams={{ title: "Prorogation" }} options={{ headerShown: false }} />
         <Stack.Screen name="BordoreauxStarter" options={{ headerShown: false }}>
       {() => <BordoreauxStarter buttonAction={navigateToTarget}  title="About prorogation request " descriptions={["You need to select a buyer and  the desired document" , "Fill up the given form with valid data" , "After submit your request would be under review"]}/>}
     </Stack.Screen>

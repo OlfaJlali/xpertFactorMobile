@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { RootStackParamList } from "../types/navigationTypes";
-import RequestFinancement from "../screens/RequestFinancement";
+import RequestFinancement from "../screens/FinancementStack/RequestFinancement";
 import CongratulationsScreen from "../screens/CongratulationScreen";
 import { useTab } from "../context/TabContext";
 import { useShow } from "../context/ShowContext";

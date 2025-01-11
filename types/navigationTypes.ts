@@ -1,20 +1,19 @@
+import { User } from "../domain/entities/User";
 import { BuyerDatatype } from "./buyersDataTypes";
-import { documentsDataTypes } from "./documentsDataTypes";
-export type Document = {
-    BuyerData : BuyerDatatype,
-    title : string
-}
+import { Document } from '../domain/entities/document';
+
+
 export type RootStackParamList = {
     PrivacyPolicy: undefined ; 
     Onboarding: undefined;
     SignIn: undefined;
     Dashboard: undefined;
     ForgotPassword: undefined;
-    VerifyScreen: undefined;
-    ChangePasswordScreen: undefined;
+    VerifyScreen: {email: string};
+    ChangePasswordScreen: {email: string};
     Bordoreaux: undefined;
     Congratulations: undefined;
-    Profile: undefined;
+    Profile: undefined
     MyAccount: undefined;
     Settings: undefined;
     ResetPassword: undefined;
@@ -28,20 +27,23 @@ export type RootStackParamList = {
         type : string
     }
     BordoreauxForm: {
-        totalAmount: string;
-        date: Date;
+        totalAmount: Number;
+        date: string;
         selectedYear: number;
         documentCount: number;
     };    
     Litige : undefined
-    LitigeDocument: Document;
-    LitigeDate: { LitigeDate: { buyerData: BuyerDatatype; document: documentsDataTypes } };
+    LitigeDocument: {
+        title: string
+        id: string
+    };
+    LitigeDate: { documentId: string};
     LimitBuyer: { pageTitle: string , handlePress: (buyer: BuyerDatatype) => void  };
-    LimitForm: BuyerDatatype;
+    LimitForm: {buyerId: string};
     Prorogation : undefined
-    ProrogationDocument: Document;
-    ProrogationDate: { ProrogationDate: { buyerData: BuyerDatatype; document: documentsDataTypes } };
+    ProrogationDocument: {title: string, id:string};
+    ProrogationDate: { documentId: string };
     Buyer: undefined;
-    ChangeFirstPassword: undefined;
+    ChangeFirstPassword: {email: string}
   };
   

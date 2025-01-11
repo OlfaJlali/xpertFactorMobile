@@ -2,12 +2,11 @@ import { createStackNavigator, StackNavigationProp } from "@react-navigation/sta
 import { RootStackParamList } from "../types/navigationTypes";
 import CongratulationsScreen from "../screens/CongratulationScreen";
 import { useNavigation } from "@react-navigation/native";
-import { BuyerDatatype } from "../types/buyersDataTypes";
 import { useTab } from "../context/TabContext";
 import { useShow } from "../context/ShowContext";
 import { useAdditionalTab } from "../context/AdditionalTabContext";
 import { useRendering } from "../context/RenderingContext";
-import BuyerScreen from "../screens/BuyerScreen";
+import BuyerScreen from "../screens/AddBuyerStack/BuyerScreen";
 import BordoreauxStarter from "../screens/BordoreauxStarter";
 import { useNavigationHook } from "../hooks/useNavigation";
 

@@ -15,7 +15,11 @@ export function useSignInViewModel(signInUseCase: SignInUseCase) {
       setLoading(false);
       return user;
     } catch (err: any) {
-      setError(err.message || 'Unknown error');
+      if(err?.status === 401){
+        setError('unvalid credentials please verify your identifier or password');
+      }else {
+        setError(err.message || 'Unknown error');
+      }
       setLoading(false);
       return null;
     }

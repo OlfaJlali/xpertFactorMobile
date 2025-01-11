@@ -3,16 +3,28 @@ import filter from 'lodash.filter';
 
 export const useSearch = <T extends Record<string, any>>(
   initialData: T[],
-  searchKeys: (keyof T)[]
+  searchKeys: (keyof T)[],
+  query: string,
+  fetchData: (page: number, search: string, id?:string) => Promise<void>, // Pass fetchBuyers here
+  id?:string,
 ) => {
-  const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState(initialData);
 
   useEffect(() => {
-    if (searchQuery.trim() === '') {
+    // If the searchQuery is empty, fetch all data (or handle accordingly)
+    if (query.trim() === '') {
       setFilteredData(initialData);
     } else {
-      const queryWords = searchQuery.toLowerCase().trim().split(/\s+/);
+      // Call fetchBuyers whenever searchQuery changes
+      fetchData(1, query, id); // Adjust the page as needed
+    }
+  }, [query, initialData, fetchData]); // Depend on query and initialData
+
+  useEffect(() => {
+    if (query.trim() === '') {
+      setFilteredData(initialData);
+    } else {
+      const queryWords = query.toLowerCase().trim().split(/\s+/);
       const filtered = filter(initialData, (item) =>
         queryWords.every((word) =>
           searchKeys.some((key) =>
@@ -22,9 +34,7 @@ export const useSearch = <T extends Record<string, any>>(
       );
       setFilteredData(filtered);
     }
-  }, [searchQuery, initialData]);
+  }, [query, initialData]);
 
-  const handleSearch = (query: string) => setSearchQuery(query);
-
-  return { searchQuery, handleSearch, filteredData };
+  return { filteredData };
 };

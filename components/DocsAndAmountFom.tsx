@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { Input } from './TextInput';
 import DatePicker from 'react-native-date-picker';
+import { handleNumericInput } from '../utils/handleNumericInput';
 type DocsAndAmountFomProps = {
     documentRef: string
     setDocumentRef:React.Dispatch<React.SetStateAction<string>>
@@ -9,8 +10,8 @@ type DocsAndAmountFomProps = {
     setDueDate: React.Dispatch<React.SetStateAction<Date>>
     documentDate:Date
     setDocumentDate: React.Dispatch<React.SetStateAction<Date>>
-    amount: string
-    setAmount:React.Dispatch<React.SetStateAction<string>>
+    amount: number | null
+    setAmount:(value: number | null) => void
 }
 const DocsAndAmountFom = (doc : DocsAndAmountFomProps) => {
     const [isOpen  ,setIsOpen] = useState(false)
@@ -19,7 +20,8 @@ const DocsAndAmountFom = (doc : DocsAndAmountFomProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>ُEnter amount</Text>
-      <Input placeholder="please enter amount" value={doc.amount} onChangeText={doc.setAmount} keyboardType="numeric" />
+
+      <Input placeholder="please enter amount" value={doc.amount !== null ? doc.amount.toString() : ''} onChangeText={(text) => handleNumericInput(text, doc.setAmount)} keyboardType="numeric" />
       <Text style={styles.label}>Document ref</Text>
       <Input placeholder="2314 - 1341 - 4362 - 1234" value={doc.documentRef} onChangeText={doc.setDocumentRef} keyboardType="numeric" />
       <View style={styles.row}>
@@ -63,7 +65,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 5, // For Android shadow
-    marginBottom:20
+    marginBottom:20,
+    gap: 10
   },
   label: {
     fontSize: 16,

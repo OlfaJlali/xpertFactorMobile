@@ -34,10 +34,10 @@ const CardsSliderItem = ({ index, item, scrollX }: CardsSliderItems) => {
             elevation: 10,
             }}/>
             <View style={{ position: 'absolute', top: '10%', left: '10%', }}>
-                <Text style={CardsSliderItemStyles.title}>{item.title}</Text>
+                <Text style={CardsSliderItemStyles.title}>{item.contractId}</Text>
             </View>
             <View style={{ position: 'absolute', bottom:'40%', left: '25%', transform: [{ translateX: -50 }] }}>
-                <Text style={CardsSliderItemStyles.amount}>{item.amount}</Text>
+                <Text style={CardsSliderItemStyles.amount}>{item.amount} TND</Text>
             </View>
         </Animated.View>
     );

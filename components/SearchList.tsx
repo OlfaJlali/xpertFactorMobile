@@ -19,6 +19,8 @@ interface SearchListProps<T> {
   text: string
   renderItem: ({ item }: { item: T }) => JSX.Element;
   addIcon? : boolean
+  onEndReached? : ((info: {distanceFromEnd: number}) => void) | null | undefined;
+  onEndReachedThreshold? : number | null | undefined
 }
 
 export const SearchList = <T,>({
@@ -27,7 +29,9 @@ export const SearchList = <T,>({
   onSearch,
   renderItem,
   text,
-  addIcon = false
+  addIcon = false,
+  onEndReached,
+  onEndReachedThreshold
 }: SearchListProps<T>) => (
   <View style={styles.container}>
     <View style={{  flexDirection: 'row' , justifyContent: 'space-between'}}>
@@ -43,6 +47,7 @@ export const SearchList = <T,>({
         <SearchInput 
         searchQuery={searchQuery}
         onSearch={onSearch}
+        
         />
     
     
@@ -52,6 +57,8 @@ export const SearchList = <T,>({
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={onEndReachedThreshold}
       />
     ) : (
       <View style={styles.emptyContainer}>

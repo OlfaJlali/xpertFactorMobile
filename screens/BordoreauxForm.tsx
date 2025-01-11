@@ -1,30 +1,21 @@
 import { RouteProp, useNavigation } from '@react-navigation/native';
-import React, { useRef, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, Dimensions, Animated } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, Dimensions, Animated } from 'react-native';
 import { RootStackParamList } from '../types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Progress from '../components/CompletedDocs';
-import { DashboardScreenStyles } from '../styles/DashboardScreenStyles';
-import DatePicker from 'react-native-date-picker';
-import BordorauxDates from '../components/BordorauxDates';
-import { Input } from '../components/TextInput';
-import Counter from './counter';
 import DocsAndAmountFom from '../components/DocsAndAmountFom';
-import { globalStyles } from '../styles/globalStyles';
 import Header from '../components/Header';
 import DocumentScanner from 'react-native-document-scanner-plugin';
-
+import mime from "mime";
 import { launchImageLibrary as _launchImageLibrary, launchCamera as _launchCamera, ImageLibraryOptions, MediaType } from 'react-native-image-picker';
-let launchImageLibrary = _launchImageLibrary;
-let launchCamera = _launchCamera;
-interface DocumentImages {
-  uri: string;
-}
 import { Alert } from 'react-native';
 import { useShow } from '../context/ShowContext';
+import TypeSelector from '../containers/Financement/TypeSelector';
+import { Button } from '../components/Button';
+import axios from 'axios';
 
 type BordoreauxFormRouteProp = RouteProp<RootStackParamList, 'BordoreauxForm'>;
-const { width } = Dimensions.get('window');
 
 interface BordereauxFormProps {
   route: BordoreauxFormRouteProp;
@@ -32,7 +23,8 @@ interface BordereauxFormProps {
 }
 const BordoreauxFormScreen: React.FC<BordereauxFormProps> = ({ route }) => {
   const { totalAmount, date, selectedYear, documentCount } = route.params;
-  const [takingPics,setTakingPics] = useState(0)
+  const parsedDate = new Date(date); 
+
   const [progress, setProgress] = useState(1);
   const [documentsData, setDocumentsData] = useState<any[]>([]);
   const [documentType, setDocumentType] = useState('Facture');
@@ -40,27 +32,28 @@ const BordoreauxFormScreen: React.FC<BordereauxFormProps> = ({ route }) => {
   const [documentRef, setDocumentRef] = useState('');
   const [dueDate, setDueDate] = useState(new Date());
   const [documentDate, setDocumentDate] = useState(new Date);
-  const [amount, setAmount] = useState('');
-const [selectedScanType, setSelectedScanType] = useState('');
-const [scannedImages , setScannedImages] = useState<string[]>([])
+  const [amount, setAmount] = useState<number | null>(null);
   type VerifyScreenNavigationProp = StackNavigationProp<RootStackParamList, 'BordoreauxForm'>;
   const navigation = useNavigation<VerifyScreenNavigationProp>();
-  const [scannedImage, setScannedImage] = useState<string | undefined>(undefined);
-
+  const [disabled,setDisabled]= useState(false)
+  const [maxDocuments,setMaxDocuments] = useState(documentCount);
+  const [scannedDocs , setScannedDocs] = useState<string[]>([])
   const scanDocument = async () => {
-    console.log('scanning...')
+    console.log('scanning...');
+    console.log(maxDocuments , 'first')
     // start the document scanner
     const { scannedImages, status } = await DocumentScanner.scanDocument({
-      maxNumDocuments: 2
+      maxNumDocuments: maxDocuments
+      
     });
     // get back an array with scanned image file paths
-    if (scannedImages && scannedImages.length > 0) {
+    if (scannedImages) {
         // set the img src, so we can view the first scanned image
-        const total = takingPics + scannedImages.length
-        setTakingPics(total)
-        setScannedImage(scannedImages[0]);
-        if (status === 'success' && scannedImages?.length) {
-          if (validateScannedDocuments(scannedImages)) {
+        setScannedDocs((prevDocs) => [...prevDocs, ...scannedImages]);
+        const total = maxDocuments - scannedDocs.length
+        setMaxDocuments(total)
+        if (status === 'success' && scannedDocs?.length) {
+          if (validateScannedDocuments(scannedDocs)) {
             navigation.navigate('Congratulations');
           }
         } else if (status === 'cancel') {
@@ -70,156 +63,49 @@ const [scannedImages , setScannedImages] = useState<string[]>([])
     }
    
   }
-  const validateScannedDocuments = (scannedImages: string[]) => {
-    const totalScanned = takingPics + scannedImages.length;
-    console.log(totalScanned , 'totalScanned' ,documentCount , 'documentCount' )
-    if (totalScanned < documentCount) {
+  const validateScannedDocuments = (scannedDocs: string[] | never[] | undefined) => {
+    const totalScanned = scannedDocs ? scannedDocs.length : 0
+    console.log(maxDocuments , 'maxDocuments' ,documentCount , 'documentCount' )
+    if (totalScanned < maxDocuments) {
       Alert.alert(
         'Incomplete Scanning',
-        `You have scanned ${totalScanned} documents. Please scan ${documentCount - totalScanned} more.`,
+        `You have scanned ${totalScanned} documents. Please scan ${maxDocuments - totalScanned} more.`,
         [{ text: 'Scan More', onPress: scanDocument }]
       );
       return false;
     }
-  
-    setTakingPics(totalScanned);
+    const stillTogo = maxDocuments - totalScanned
+    setMaxDocuments(stillTogo);
     return true;
   };
-  
-
-
-
-  const handleDocumentTypeChange = (type: string) => setDocumentType(type);
-  const handlePaymentModeChange = (mode: string) => setPaymentMode(mode);
   const scrollViewRef = useRef<ScrollView>(null);
-  const openImagePicker = () => {
-    const options: ImageLibraryOptions = {
-      mediaType: 'photo',
-      includeBase64: false,
-      maxHeight: 2000,
-      maxWidth: 2000,
-      selectionLimit: documentCount, // Allow selecting multiple images up to the document count
-    };
-  
-    launchImageLibrary(options, handleResponse);
-  };
-  
-  const handleCameraLaunch = () => {
-    if (takingPics >= documentCount) {
-      Alert.alert(
-        'Limit Reached',
-        `You can only take up to ${documentCount} pictures.`
-      );
-      return;
-    }
-  
-    const options: ImageLibraryOptions = {
-      mediaType: 'photo',
-      includeBase64: false,
-      maxHeight: 2000,
-      maxWidth: 2000,
-    };
-  
-    launchCamera(options, (response) => {
 
-      if (response.didCancel) {
-        console.log('User cancelled the camera.');
-      } else if (response.errorMessage) {
-        console.log('Camera error:', response.errorMessage);
-      } else {
+ 
   
-        setTakingPics((prevCount) => {
-          const newImageCount = prevCount + 1; // Correctly increment the state
-  
-          console.log(`Picture taken! Current count: ${newImageCount}`);
-  
-          if (newImageCount < documentCount) {
-            // Automatically reopen the camera if more pictures are needed
-            handleCameraLaunch();
-          } else {
-            console.log('All pictures taken.');
-            setTimeout(() => {
-              navigation.navigate('Congratulations');
-            }, 100); // Add a slight delay to avoid conflicts
-        
-          }
-  
-          return newImageCount; // Return the updated state
-        });
-  
-  
-      }
-    });
-  };
-  
-  
-  const handleResponse = (response: any) => {
-    if (response.didCancel) {
-      console.log('User cancelled image picker');
-    } else if (response.errorMessage) {
-      console.log('Image picker error: ', response.errorMessage);
+  useEffect(() => {
+    if (amount === null || documentRef.length < 6 || amount < 100) {
+      setDisabled(true);
     } else {
-      const selectedImages = response.assets || [response]; // Ensure assets array exists
-      const imageUris = selectedImages.map((asset: any) => asset.uri); // Extract URIs
-  
-      const newImageCount = takingPics + imageUris.length;
-  
-      if (newImageCount <= documentCount) {
-        setTakingPics(newImageCount); // Update taken/selected pictures count
-        console.log('Images selected:', imageUris);
-  
-        if (newImageCount === documentCount) {
-          console.log('All images captured or selected.');
-          navigation.navigate('Congratulations'); // Proceed to next screen
-        }
-      } else {
-        console.log(
-          `Exceeded document count. Maximum allowed is ${documentCount}, but ${newImageCount} images were selected.`
-        );
-        Alert.alert('Error', `You can only select up to ${documentCount} images.`);
-      }
+      setDisabled(false);
     }
-  };
-  
-  const openImagePickerOptions = () => {
-    Alert.alert(
-      'Choose an Option',
-      'Select how you want to scan your documents',
-      [
-        {
-          text: 'Camera',
-          onPress: handleCameraLaunch, // Opens the camera
-        },
-        {
-          text: 'Gallery',
-          onPress: openImagePicker, // Opens the gallery
-        },
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-      ],
-      { cancelable: true }
-    );
-  };
+  }, [amount, documentRef]);
+
+
   
   // Ensure to initialize the state properly
   
-  const handleNext = () => {
-    // Save the current document data
+  const handleNext = async () => {
     const newDocument = {
       documentType,
       paymentMode,
-      documentRef,
+      reference: documentRef,
       dueDate,
       documentDate,
       amount,
     };
-
-
-    // Update documents array
+  
     setDocumentsData((prev) => [...prev, newDocument]);
-    // Increment progress
+  
     if (progress < documentCount) {
       scrollViewRef.current?.scrollTo({ y: 0, animated: true });
       setProgress(progress + 1);
@@ -228,93 +114,134 @@ const [scannedImages , setScannedImages] = useState<string[]>([])
       setDocumentRef('');
       setDueDate(new Date());
       setDocumentDate(new Date());
-      setAmount('');
+      setAmount(null);
     } else {
-      const allDocuments = [...documentsData, newDocument]; // Manually append the new document to the previous ones
-    console.log('All documents:', allDocuments);
-    // openImagePickerOptions()
-    scanDocument()
-
+      const allDocuments = [...documentsData, newDocument];
+      console.log('All documents:', allDocuments);
+  
+      // Start document scanning
+      const { scannedImages, status } = await scanDocuments(documentCount);
+  
+      if (status === 'success' && scannedImages && validateScannedDocuments(scannedImages)) {
+        const documentsWithScans = allDocuments.map((doc, index) => ({
+          ...doc,
+          scannedImage: scannedImages[index] || '', // Attach scanned image paths
+        }));
+        uploadBordereau(documentsWithScans);
+      } else if (status === 'cancel') {
+        Alert.alert('Scan Cancelled', 'Please complete the scanning process.');
+      }
     }
   };
+  
+  const scanDocuments = async (maxDocs: number) => {
+    try {
+      console.log('Starting document scanning...');
+      const { scannedImages, status } = await DocumentScanner.scanDocument({
+        maxNumDocuments: maxDocs,
+      });
+  
+      if (status === 'success' && scannedImages) {
+        // Ensure scannedImages is defined before updating state
+        setScannedDocs((prevDocs) => [...prevDocs, ...scannedImages]);
+        return { scannedImages, status };
+      } else if (status === 'cancel') {
+        Alert.alert('Scan Cancelled', 'Please complete the scanning process.');
+        return { scannedImages: [], status: 'cancel' };
+      }
+  
+      return { scannedImages: [], status: 'error' };
+    } catch (error) {
+      console.error('Error during document scanning:', error);
+      Alert.alert('Scanning Error', 'Something went wrong during scanning.');
+      return { scannedImages: [], status: 'error' };
+    }
+  };
+    
+  const uploadBordereau = async (documents: any[]) => {
+    console.log('Documents passed to uploadBordereau:', documents);
+    try {
+      const formData = new FormData();
+  
+      // Append bordereau details
+      formData.append('bordereauAmount', totalAmount.toString());
+      formData.append('bordereauYear', selectedYear.toString());
+      formData.append('bordereauDate', parsedDate.toISOString());
+  
+      documents.forEach((doc, index) => {
+        const newImageUri = "file:///" + doc.scannedImage.split("file:/").join("");
+        console.log('New Image URI:', newImageUri);
+        // Append each document's metadata
+        formData.append(`docs[${index}][docType]`, doc.documentType);
+        formData.append(`docs[${index}][paymentMode]`, doc.paymentMode);
+        formData.append(`docs[${index}][reference]`, doc.reference);
+        formData.append(`docs[${index}][dueDate]`, doc.dueDate );
+        formData.append(`docs[${index}][docDate]`, doc.documentDate );
+                formData.append(`docs[${index}][amount]`, doc.amount.toString());
+  
+        // Append the scanned image file
+        formData.append(
+          `docs[${index}][scannedImage]`,
+          {
+            uri: newImageUri,
+            type: mime.getType(newImageUri) || 'image/jpeg',
+            name: newImageUri.split('/').pop(),
+          }
+        );
+      });
+  
+      console.log('Payload to be sent:', formData);
+  
+      const response = await axios.post('https://shamash.onrender.com/api/add-bordereau', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+  
+      console.log('API Response:', response.data);
+      Alert.alert('Success', 'Bordereau created successfully!');
+      navigation.navigate('Congratulations');
+    } catch (error) {
+      console.error('Error uploading bordereau:', error);
+      Alert.alert('Error', 'Failed to create bordereau. Please try again.');
+    }
+  };
+  
+  
   const {  setShow } = useShow();  
+  const typeOfDocTabs = [
+    { title: 'Facture', key: 'Facture' },
+    { title: 'Bon de commande', key: 'Bon de commande' },
+    { title: 'Marche', key: 'Marche' },
+  ];
+  const modeOfPayment = [
+    { title: 'Traite', key: 'Traite' },
+    { title: 'Virement', key: 'Virement' },
+    { title: 'Cheque', key: 'Cheque' },
+  ];
+
 
 
   return (
    <SafeAreaView style={styles.safeAreaContainer}>
-    <ScrollView ref={scrollViewRef} 
-     onScroll={() => setShow(false)}
-     onMomentumScrollEnd={() => setShow(true)}
-     scrollEventThrottle={16}
-
-    showsVerticalScrollIndicator={false} 
-    contentContainerStyle={styles.scrollViewContent}>
-    {/* <View style={{paddingTop: 20}}>
-      </View> */}
+    <ScrollView 
+      ref={scrollViewRef} 
+      onScroll={() => setShow(false)}
+      onMomentumScrollEnd={() => setShow(true)}
+      scrollEventThrottle={16}
+      showsVerticalScrollIndicator={false} 
+      contentContainerStyle={styles.scrollViewContent}
+      >
       <Header goBack={() => navigation.pop()} title='Bordereau' />
 
       <View style={styles.container}>
-
-
         <Progress documentCount={documentCount} progress={progress} />
-<View style={{ backgroundColor: '#FFF',
-    padding: 20,
-    borderRadius: 15,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5, // For Android shadow
-    marginBottom:20}}>
-        <View style={styles.section}>
+
+        <View style={styles.typeAndMode}>
           <Text style={styles.sectionTitle}>Type of document</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}   >
-          <View style={DashboardScreenStyles.tabContainer}>
-            <TouchableOpacity
-              style={[DashboardScreenStyles.tab, documentType === 'Facture' && DashboardScreenStyles.activeTab]}
-              onPress={() => handleDocumentTypeChange('Facture')}
-            >
-              <Text style= {documentType === 'Facture' ?  DashboardScreenStyles.tabTextSelected : DashboardScreenStyles.tabText}>Facture</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[DashboardScreenStyles.tab, documentType === 'Bon de commande' && DashboardScreenStyles.activeTab]}
-              onPress={() => handleDocumentTypeChange('Bon de commande')}
-            >
-              <Text style={documentType === 'Bon de commande' ?  DashboardScreenStyles.tabTextSelected : DashboardScreenStyles.tabText}>Bon de commande</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[DashboardScreenStyles.tab, documentType === 'Marche' && DashboardScreenStyles.activeTab]}
-              onPress={() => handleDocumentTypeChange('Marche')}
-            >
-              <Text style= {documentType === 'Marche' ?  DashboardScreenStyles.tabTextSelected : DashboardScreenStyles.tabText}>Marche</Text>
-              </TouchableOpacity>
-          </View>
-          </ScrollView>
-        
-        </View>
-      
-        <View style={styles.section}>
+          <TypeSelector tabs={typeOfDocTabs} selectedTab={documentType} onSelectTab={setDocumentType} centred />
           <Text style={styles.sectionTitle}>Mode of Payment</Text>
-          <View style={DashboardScreenStyles.tabContainer}>
-            <TouchableOpacity
-              style={[DashboardScreenStyles.tab, paymentMode === 'Traite' && DashboardScreenStyles.activeTab]}
-              onPress={() => handlePaymentModeChange('Traite')}
-            >
-              <Text style= {paymentMode === 'Traite' ?  DashboardScreenStyles.tabTextSelected : DashboardScreenStyles.tabText}>Traite</Text>
-              </TouchableOpacity>
-            <TouchableOpacity
-              style={[DashboardScreenStyles.tab, paymentMode === 'Virement' && DashboardScreenStyles.activeTab]}
-              onPress={() => handlePaymentModeChange('Virement')}
-            >
-              <Text style= {paymentMode === 'Virement' ?  DashboardScreenStyles.tabTextSelected : DashboardScreenStyles.tabText}>Virement</Text>
-              </TouchableOpacity>
-            <TouchableOpacity
-              style={[DashboardScreenStyles.tab, paymentMode === 'Cheque' && DashboardScreenStyles.activeTab]}
-              onPress={() => handlePaymentModeChange('Cheque')}
-            >
-              <Text style= {paymentMode === 'Cheque' ?  DashboardScreenStyles.tabTextSelected : DashboardScreenStyles.tabText}>Cheque</Text>
-              </TouchableOpacity>
-          </View>
-        </View>
+          <TypeSelector tabs={modeOfPayment} selectedTab={paymentMode} onSelectTab={setPaymentMode} centred />
         </View>
 
         <DocsAndAmountFom 
@@ -327,10 +254,8 @@ const [scannedImages , setScannedImages] = useState<string[]>([])
           amount={amount}
           setAmount={setAmount}
         />
-        {/* Next Button */}
-        <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-          <Text style={styles.nextButtonText}>{progress < documentCount ? 'Next' : 'Scan documents'} </Text>
-        </TouchableOpacity>
+  
+        <Button title={progress < documentCount ? 'Next' : 'Scan documents'} onPress={handleNext} disabled={disabled} />
       </View>
       </ScrollView>
     </SafeAreaView> 
@@ -338,46 +263,20 @@ const [scannedImages , setScannedImages] = useState<string[]>([])
 };
 
 const styles = StyleSheet.create({
+  typeAndMode:{
+    backgroundColor: '#FFF',
+    padding: 20,
+    borderRadius: 15,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5, // For Android shadow
+    marginBottom:20
+  },
   scrollViewContent: {
     flexGrow: 1,
     justifyContent: 'center',
     paddingBottom: 110,
-  },
-  plainCard: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E6E6E6',
-  },
-  card: {
-    width: width / 2.4,
-    height: width / 2,
-    borderRadius: 15,
-    padding: 15,
-    justifyContent: 'space-between',
-    shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity:  0.19,
-    shadowRadius: 5.62,
-    elevation: 6
-  },
-  subtitleDark: {
-    fontSize: 14,
-    color: '#2E2E3A',
-    fontWeight: 'bold'
-  },
-
-  YearTextDark: {
-    fontSize: 50,
-    fontWeight: 'bold',
-    color: '#3E77BC',
-  },
-  DateTextDark: {
-    fontSize: 50,
-    fontWeight: 'bold',
-    color: '#2E2E3A',
   },
   container: {
     backgroundColor: '#FFF' ,
@@ -385,88 +284,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
     // backgroundColor: '#F9F9F9',
   },
-  progressContainer: {
-    marginBottom: 20,
-  },
-  progressText: {
-    fontSize: 16,
-    color: '#333',
-  },
-  progressBarBackground: {
-    height: 10,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 5,
-    marginVertical: 10,
-  },
-  progressBarFill: {
-    height: 10,
-    backgroundColor: '#007BFF',
-    borderRadius: 5,
-  },
   safeAreaContainer: {
     flex: 1,
     backgroundColor: '#fff',
     paddingTop: 20
-  },
-
-  section: {
-    // paddingTop:20,
-    // marginBottom: 20,
-    
-
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
     color:'#000'
-  },
-  documentTypeContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  documentTypeButton: {
-    flex: 1,
-    padding: 10,
-    marginHorizontal: 5,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  activeButton: {
-    backgroundColor: '#007BFF',
-  },
-  paymentModeContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  paymentModeButton: {
-    flex: 1,
-    padding: 10,
-    marginHorizontal: 5,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-  },
-  nextButton: {
-    backgroundColor: '#3E77BC',
-    padding: 16,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#000',
-  },
-  nextButtonText: {
-    color: '#fff',
-    fontSize: 16,
   },
 });
 

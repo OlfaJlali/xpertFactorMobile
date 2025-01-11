@@ -15,10 +15,16 @@ import { RootStackParamList } from '../types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { Input } from '../components/TextInput';
+import { DIContainer } from '../di/container';
+import { Button } from '../components/Button';
 
 const { width } = Dimensions.get('window');
-
-const ChangeFirstPassword: React.FC = () => {
+type ChangeFirstPasswordProps = {
+  route : any
+}
+const ChangeFirstPassword: React.FC<ChangeFirstPasswordProps> = ({ route }) => {
+  const {email} = route.params;
+  console.log(email)
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [buttonEnabled, setButtonEnabled] = useState(false);
@@ -58,14 +64,18 @@ const ChangeFirstPassword: React.FC = () => {
     ]).start();
   }, [fadeAnim]);
 
-  const handleRecoverPassword = () => {
+  const handleRecoverPassword = async () => {
     if (!buttonEnabled) return;
+    setLoading(true);
+    try {
+      await DIContainer.firstSignInUseCase.execute(email,password);
+      navigation.navigate('SignIn');
+    } catch (err: any) {
+      setErrorMessage('couldnt change password');
+    } finally {
+      setLoading(false);
+    }
 
-    setLoading(true); // Show the loader
-    setTimeout(() => {
-      setLoading(false); // Hide the loader after backend response
-      navigation.navigate('SignIn'); // Navigate to SignIn
-    }, 2000); // Simulated backend response time (2 seconds)
   };
 
   return (
@@ -100,20 +110,7 @@ const ChangeFirstPassword: React.FC = () => {
             <Text style={styles.errorText}>{errorMessage}</Text>
           ) : null}
         </Animated.View>
-        <TouchableOpacity
-          style={[
-            styles.button,
-            { backgroundColor: buttonEnabled && !loading ? '#3E77BC' : '#A0B9D9' },
-          ]}
-          onPress={handleRecoverPassword}
-          disabled={!buttonEnabled || loading}
-        >
-          {loading ? (
-            <ActivityIndicator size="small" color="#fff" />
-          ) : (
-            <Text style={styles.buttonText}>Create new password</Text>
-          )}
-        </TouchableOpacity>
+        <Button title='Create new password' onPress={handleRecoverPassword} loading={loading} disabled={!buttonEnabled} />
       </ScrollView>
     </KeyboardAvoidingView>
   );

@@ -1,16 +1,15 @@
 import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types/navigationTypes";
-import BuyerLitige from "../screens/BuyerLitige";
-import LitigeDocument from "../screens/LitigeDocument";
-import LitigeDate from "../screens/LitigeDate";
+import BuyerLitige from "../screens/ListStack/BuyerList";
+import DocumentList from "../screens/ListStack/DocumentList";
+import LitigeDate from "../screens/LitigeStack/LitigeDate";
 import CongratulationsScreen from "../screens/CongratulationScreen";
 import { useNavigation } from "@react-navigation/native";
-import { BuyerDatatype } from "../types/buyersDataTypes";
 import { useTab } from "../context/TabContext";
 import { useShow } from "../context/ShowContext";
 import { useAdditionalTab } from "../context/AdditionalTabContext";
 import { useRendering } from "../context/RenderingContext";
-import LitigeBuyerScreen from "../screens/LitigeBuyerScreen";
+import LitigeBuyerScreen from "../screens/LitigeStack/LitigeBuyerScreen";
 import BordoreauxStarter from "../screens/BordoreauxStarter";
 import { useNavigationHook } from "../hooks/useNavigation";
 
@@ -48,7 +47,7 @@ export const LitigeStackNavigator = () => {
 
               {/* <Stack.Screen name='BordoreauxStarter' component={BordoreauxStarter}  options={{ headerShown: false }}/> */}
 
-        <Stack.Screen name='LitigeDocument' component={LitigeDocument} initialParams={{title: "Litige"}} options={{ headerShown: false }}/>
+        <Stack.Screen name='LitigeDocument' component={DocumentList} initialParams={{title: "Litige"}} options={{ headerShown: false }}/>
         <Stack.Screen name='LitigeDate' component={LitigeDate} options={{ headerShown: false }} />
         <Stack.Screen name="Congratulations" options={{ headerShown: false }}>
   {() => <CongratulationsScreen onPress={goToDashboard} text="your request is successfully sent" />}

@@ -1,11 +1,7 @@
 import { SharedValue } from "react-native-reanimated";
-export type CardsDataType = {
-    id:string ,
-    title:string,
-    amount:string,
-  }
+import { Contract } from "../domain/entities/Contract";
 export type CardsSliderItems = {
-    item: CardsDataType;
+    item: Contract;
     index: number;
     scrollX:SharedValue<number>
 };

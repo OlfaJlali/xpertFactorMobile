@@ -1,18 +1,13 @@
 import React from "react";
 import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types/navigationTypes";
-import BuyerLitige from "../screens/BuyerLitige";
-import LitigeDocument from "../screens/LitigeDocument";
-import LitigeDate from "../screens/LitigeDate";
 import CongratulationsScreen from "../screens/CongratulationScreen";
-import { BuyerDatatype } from "../types/buyersDataTypes";
 import { useNavigation } from "@react-navigation/native";
-import { Text, View } from "react-native";
-import RequestLimit from "../screens/RequestLimit";
+import RequestLimit from "../screens/LimitStack/RequestLimit";
 import { useTab } from "../context/TabContext";
 import { useShow } from "../context/ShowContext";
 import { useRendering } from "../context/RenderingContext";
-import LimitBuyerScreen from "../screens/LimitBuyerScreen";
+import LimitBuyerScreen from "../screens/LimitStack/LimitBuyerScreen";
 import BordoreauxStarter from "../screens/BordoreauxStarter";
 import { useNavigationHook } from "../hooks/useNavigation";
 
@@ -24,8 +19,8 @@ export const LimitStackNavigator = () => {
   // Use navigation inside the function component
   const navigation = useNavigation<LimitNavigationProp>();
 
-  const handlePress = (buyer: BuyerDatatype) => {
-    navigation.navigate("LimitForm", buyer);
+  const handlePress = (buyerId: string) => {
+    navigation.navigate("LimitForm", {buyerId});
   };
   const { setSelectedIndex } = useTab();
   const { setShow } = useShow();  

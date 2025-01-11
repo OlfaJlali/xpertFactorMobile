@@ -1,7 +1,7 @@
 import { icons } from 'lucide-react-native';
 import { MotiProps } from 'moti';
 
-type IconNames = keyof typeof icons;
+export type IconNames = keyof typeof icons;
 
 export type TabItem = {
     icon: IconNames;

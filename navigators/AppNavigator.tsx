@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import OnboardingScreen from '../screens/OnBoardingScreen';
-import { SignInScreen } from '../screens/SignInScreen';
-import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
-import VerifyScreen from '../screens/VerifyScreen';
-import ChangePasswordScreen from '../screens/ChangePassword';
+import { SignInScreen } from '../screens/AuthStack/SignInScreen';
+import ForgotPasswordScreen from '../screens/AuthStack/ForgotPasswordScreen';
+import VerifyScreen from '../screens/AuthStack/VerifyScreen';
+import ChangePasswordScreen from '../screens/AuthStack/ChangePassword';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { COLOR_MAIN } from '../styles/globalStyles';
@@ -50,17 +50,17 @@ const AppNavigator: React.FC = () => {
       </Stack.Screen>
 
       <Stack.Screen name="ChangeFirstPassword" options={{ headerShown: false }}>
-        {(props) => <ChangeFirstPassword />} 
+        {(props) => <ChangeFirstPassword route={props.route} />} 
       </Stack.Screen>
 
       <Stack.Screen name="ForgotPassword" options={{ headerShown: false }}>
         {(props) => <ForgotPasswordScreen />} 
       </Stack.Screen>
       <Stack.Screen name="VerifyScreen" options={{ headerShown: false }}>
-        {(props) => <VerifyScreen />} 
+      {(props) => <VerifyScreen route={props.route} />}
       </Stack.Screen>
       <Stack.Screen name="ChangePasswordScreen" options={{ headerShown: false }}>
-        {(props) => <ChangePasswordScreen />} 
+        {(props) => <ChangePasswordScreen route={props.route}  />} 
       </Stack.Screen>
     </Stack.Navigator>
   );
